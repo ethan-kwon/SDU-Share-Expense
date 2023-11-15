@@ -25,7 +25,6 @@ import com.sdu.share.expense.R
 enum class ShareExpenseScreen(@StringRes val title: Int) {
     WELCOME_SCREEN(R.string.welcome_screen),
     SIGN_IN_SCREEN(R.string.sign_in_screen),
-    SIGN_UP_SCREEN(R.string.sign_up_screen),
     SIGN_UP_PERSONAL_DETAILS_SCREEN(R.string.sign_up_personal_details_screen),
     SIGN_UP_ACCOUNT_DETAILS_SCREEN(R.string.sign_up_account_details_screen)
 }
@@ -100,12 +99,6 @@ fun ShareExpenseApp(
                     onCancelButtonClicked = { /*TODO*/ },
                     onNextButtonClicked = { /*TODO*/ })
             }
-            composable(route = ShareExpenseScreen.SIGN_UP_SCREEN.name) {
-                SignUpScreen(
-
-                )
-            }
-
         }
     }
 }

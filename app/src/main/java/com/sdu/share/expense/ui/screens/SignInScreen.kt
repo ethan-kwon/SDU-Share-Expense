@@ -10,10 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.sdu.share.expense.R
-import com.sdu.share.expense.ui.components.EditPasswordTextField
 import com.sdu.share.expense.ui.components.PasswordTextField
 import com.sdu.share.expense.ui.components.UsernameTextField
 
@@ -35,6 +33,7 @@ fun SignInScreen(
             onUsernameChange = { username = it }
         )
         PasswordTextField(
+            labelId = R.string.password_input_label,
             password = password,
             onPasswordChange = { password = it }
         )

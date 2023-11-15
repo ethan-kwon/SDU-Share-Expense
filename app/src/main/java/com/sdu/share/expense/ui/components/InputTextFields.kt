@@ -25,11 +25,14 @@ import com.sdu.share.expense.R
 fun EditTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
-    keyboardOptions: KeyboardOptions,
+    keyboardType: KeyboardType,
     value: String,
     onValueChange: (String) -> Unit,
+    isFinalField: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val imeAction = if (isFinalField) ImeAction.Done else ImeAction.Next
+
     TextField(
         leadingIcon = {
             Icon(
@@ -39,9 +42,33 @@ fun EditTextField(
         },
         label = { Text(stringResource(labelId)) },
         singleLine = true,
-        keyboardOptions = keyboardOptions,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = keyboardType,
+            imeAction = imeAction
+        ),
         value = value,
         onValueChange = onValueChange,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun GenericTextField(
+    @StringRes labelId: Int,
+    @DrawableRes leadingIconId: Int,
+    value: String,
+    onValueChange: (String) -> Unit,
+    isFinalField: Boolean,
+    modifier: Modifier = Modifier
+
+) {
+    EditTextField(
+        labelId = labelId,
+        leadingIconId = leadingIconId,
+        keyboardType = KeyboardType.Text,
+        value = value,
+        onValueChange = onValueChange,
+        isFinalField = isFinalField,
         modifier = modifier
     )
 }
@@ -50,17 +77,15 @@ fun EditTextField(
 fun UsernameTextField(
     username: String,
     onUsernameChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isFinalField: Boolean = false
 ) {
-    EditTextField(
+    GenericTextField(
         labelId = R.string.username_input_label,
         leadingIconId = R.drawable.account_circle_24px,
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Next
-        ),
         value = username,
         onValueChange = onUsernameChange,
+        isFinalField = isFinalField,
         modifier = modifier
     )
 }
@@ -69,9 +94,9 @@ fun UsernameTextField(
 fun EditPasswordTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
-    imeAction: ImeAction,
     value: String,
     onValueChange: (String) -> Unit,
+    isFinalField: Boolean,
     modifier: Modifier = Modifier
 ) {
     var isPasswordVisible by remember {
@@ -82,6 +107,7 @@ fun EditPasswordTextField(
         if (isPasswordVisible) R.drawable.visibility_24px else R.drawable.visibility_off_24px
     val trailingIcon = painterResource(trailingIconId)
 
+    val imeAction = if (isFinalField) ImeAction.Done else ImeAction.Next
 
     TextField(
         leadingIcon = {
@@ -115,17 +141,18 @@ fun EditPasswordTextField(
 
 @Composable
 fun PasswordTextField(
+    @StringRes labelId: Int,
     password: String,
     onPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    @StringRes labelId: Int = R.string.password_input_label,
+    isFinalField: Boolean = true
 ) {
     EditPasswordTextField(
         labelId = labelId,
         leadingIconId = R.drawable.lock_24px,
-        imeAction = ImeAction.Done,
         value = password,
         onValueChange = onPasswordChange,
+        isFinalField = isFinalField,
         modifier = modifier
     )
 }

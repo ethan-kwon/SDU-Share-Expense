@@ -1,7 +1,6 @@
 package com.sdu.share.expense.ui.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,11 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.sdu.share.expense.R
-import com.sdu.share.expense.ui.components.EditTextField
+import com.sdu.share.expense.ui.components.GenericTextField
 import com.sdu.share.expense.ui.components.PasswordTextField
 import com.sdu.share.expense.ui.components.TwoNavigationButtonInRow
 import com.sdu.share.expense.ui.components.UsernameTextField
@@ -44,35 +41,26 @@ fun PersonalDetailsScreen(
     }
 
     Column(modifier = modifier) {
-        EditTextField(
+        GenericTextField(
             labelId = R.string.first_name_input_label,
             leadingIconId = R.drawable.badge_24px,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
             value = firstName,
-            onValueChange = { firstName = it }
+            onValueChange = { firstName = it },
+            isFinalField = false
         )
-        EditTextField(
+        GenericTextField(
             labelId = R.string.last_name_input_label,
             leadingIconId = R.drawable.badge_24px,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
             value = lastName,
-            onValueChange = { lastName = it }
+            onValueChange = { lastName = it },
+            isFinalField = false
         )
-        EditTextField(
+        GenericTextField(
             labelId = R.string.email_input_label,
-            leadingIconId = R.drawable.mail_24px,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
+            leadingIconId = R.drawable.badge_24px,
             value = email,
-            onValueChange = { email = it }
+            onValueChange = { email = it },
+            isFinalField = false
         )
         TwoNavigationButtonInRow(
             firstButtonLabel = R.string.cancel_button_label,
@@ -127,7 +115,7 @@ fun AccountDetailsScreen(
         )
         TwoNavigationButtonInRow(
             firstButtonLabel = R.string.cancel_button_label,
-            secondButtonLabel = R.string.next_button_label,
+            secondButtonLabel = R.string.create_account_button_label,
             onFirstButtonClicked = onCancelButtonClicked,
             onSecondButtonClicked = onNextButtonClicked
         )
