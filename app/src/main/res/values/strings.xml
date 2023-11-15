@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SDU Share Expense</string>
+
+    <!-- Screen titles -->
+    <string name="welcome_screen">Welcome screen</string>
+    <string name="sign_in_screen">Sign in</string>
+    <string name="sign_up_screen">Sign up</string>
+
 </resources>
