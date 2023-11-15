@@ -5,13 +5,22 @@
     <string name="welcome_screen">Welcome screen</string>
     <string name="sign_in_screen">Sign in</string>
     <string name="sign_up_screen">Sign up</string>
+    <string name="sign_up_personal_details_screen">Personal details</string>
+    <string name="sign_up_account_details_screen">Account details</string>
 
     <!-- Input labels -->
     <string name="username_input_label">Username</string>
     <string name="password_input_label">Password</string>
+    <string name="new_password_input_label">New password</string>
+    <string name="retype_password_input_label">Confirm password</string>
+    <string name="first_name_input_label">First name</string>
+    <string name="last_name_input_label">Last name</string>
+    <string name="email_input_label">E-mail</string>
 
     <!-- Button labels -->
     <string name="sign_in_button_label">Sign in</string>
     <string name="sign_up_button_label">Sign up</string>
+    <string name="cancel_button_label">Cancel</string>
+    <string name="next_button_label">Next</string>
 
 </resources>

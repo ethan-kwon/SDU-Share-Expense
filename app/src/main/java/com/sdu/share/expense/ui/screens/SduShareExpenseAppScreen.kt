@@ -25,7 +25,9 @@ import com.sdu.share.expense.R
 enum class ShareExpenseScreen(@StringRes val title: Int) {
     WELCOME_SCREEN(R.string.welcome_screen),
     SIGN_IN_SCREEN(R.string.sign_in_screen),
-    SIGN_UP_SCREEN(R.string.sign_up_screen)
+    SIGN_UP_SCREEN(R.string.sign_up_screen),
+    SIGN_UP_PERSONAL_DETAILS_SCREEN(R.string.sign_up_personal_details_screen),
+    SIGN_UP_ACCOUNT_DETAILS_SCREEN(R.string.sign_up_account_details_screen)
 }
 
 @Composable
@@ -80,7 +82,7 @@ fun ShareExpenseApp(
             composable(route = ShareExpenseScreen.WELCOME_SCREEN.name) {
                 WelcomeScreen(
                     onSignInButtonClick = { navController.navigate(ShareExpenseScreen.SIGN_IN_SCREEN.name) },
-                    onSignUpButtonClick = { navController.navigate(ShareExpenseScreen.SIGN_UP_SCREEN.name) }
+                    onSignUpButtonClick = { navController.navigate(ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) }
                 )
             }
             composable(route = ShareExpenseScreen.SIGN_IN_SCREEN.name) {
@@ -88,12 +90,22 @@ fun ShareExpenseApp(
 
                 )
             }
-
+            composable(route = ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) {
+                PersonalDetailsScreen(
+                    onCancelButtonClicked = { /*TODO*/ },
+                    onNextButtonClicked = { navController.navigate(ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name) })
+            }
+            composable(route = ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name) {
+                AccountDetailsScreen(
+                    onCancelButtonClicked = { /*TODO*/ },
+                    onNextButtonClicked = { /*TODO*/ })
+            }
             composable(route = ShareExpenseScreen.SIGN_UP_SCREEN.name) {
                 SignUpScreen(
 
                 )
             }
+
         }
     }
 }

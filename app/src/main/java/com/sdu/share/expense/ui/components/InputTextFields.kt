@@ -47,6 +47,25 @@ fun EditTextField(
 }
 
 @Composable
+fun UsernameTextField(
+    username: String,
+    onUsernameChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    EditTextField(
+        labelId = R.string.username_input_label,
+        leadingIconId = R.drawable.account_circle_24px,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
+        value = username,
+        onValueChange = onUsernameChange,
+        modifier = modifier
+    )
+}
+
+@Composable
 fun EditPasswordTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
@@ -90,6 +109,23 @@ fun EditPasswordTextField(
         value = value,
         onValueChange = onValueChange,
         visualTransformation = if (!isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun PasswordTextField(
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    @StringRes labelId: Int = R.string.password_input_label,
+) {
+    EditPasswordTextField(
+        labelId = labelId,
+        leadingIconId = R.drawable.lock_24px,
+        imeAction = ImeAction.Done,
+        value = password,
+        onValueChange = onPasswordChange,
         modifier = modifier
     )
 }
