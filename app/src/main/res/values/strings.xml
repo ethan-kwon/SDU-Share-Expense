@@ -6,4 +6,12 @@
     <string name="sign_in_screen">Sign in</string>
     <string name="sign_up_screen">Sign up</string>
 
+    <!-- Input labels -->
+    <string name="username_input_label">Username</string>
+    <string name="password_input_label">Password</string>
+
+    <!-- Button labels -->
+    <string name="sign_in_button_label">Sign in</string>
+    <string name="sign_up_button_label">Sign up</string>
+
 </resources>
