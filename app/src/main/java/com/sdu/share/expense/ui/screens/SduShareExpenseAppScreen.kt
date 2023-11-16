@@ -21,8 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sdu.share.expense.ui.models.SignUpViewModel
-import com.sdu.share.expense.ui.navigation.EntryAppGraph
 import com.sdu.share.expense.ui.navigation.ShareExpenseScreen
+import com.sdu.share.expense.ui.navigation.entryAppGraph
 
 
 @Composable
@@ -76,7 +76,7 @@ fun ShareExpenseApp(
             startDestination = ShareExpenseScreen.WELCOME_SCREEN.name,
             modifier = Modifier.padding(innerPadding)
         ) {
-            EntryAppGraph(
+            entryAppGraph(
                 navController = navController,
                 signUpData = signUpUiState,
                 setPersonalDetails = { firstName: String, lastName: String, email: String ->

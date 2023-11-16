@@ -11,7 +11,7 @@ import com.sdu.share.expense.ui.screens.SignUpSummaryScreen
 import com.sdu.share.expense.ui.screens.WelcomeScreen
 
 
-fun NavGraphBuilder.EntryAppGraph(
+fun NavGraphBuilder.entryAppGraph(
     navController: NavHostController,
     signUpData: SignUpData,
     setPersonalDetails: (firstName: String, lastName: String, email: String) -> Unit,
