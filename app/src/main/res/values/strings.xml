@@ -7,6 +7,7 @@
     <string name="sign_up_screen">Sign up</string>
     <string name="sign_up_personal_details_screen">Personal details</string>
     <string name="sign_up_account_details_screen">Account details</string>
+    <string name="sign_up_summary_screen">Sign up summary</string>
 
     <!-- Input labels -->
     <string name="username_input_label">Username</string>
@@ -23,5 +24,12 @@
     <string name="cancel_button_label">Cancel</string>
     <string name="next_button_label">Next</string>
     <string name="create_account_button_label">Create account</string>
+
+    <!-- Sign up summary screen -->
+    <string name="first_name_sign_up_summary_label">First name: </string>
+    <string name="last_name_sign_up_summary_label">Last name: </string>
+    <string name="email_sign_up_summary_label">Email: </string>
+    <string name="username_sign_up_summary_label">Username: </string>
+    <string name="should_send_notifications_sign_up_summary_label">Should send notifications?: </string>
 
 </resources>

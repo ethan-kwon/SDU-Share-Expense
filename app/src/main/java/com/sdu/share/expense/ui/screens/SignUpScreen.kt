@@ -1,6 +1,7 @@
 package com.sdu.share.expense.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,8 +9,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.sdu.share.expense.R
+import com.sdu.share.expense.models.SignUpData
 import com.sdu.share.expense.ui.components.GenericTextField
 import com.sdu.share.expense.ui.components.PasswordTextField
 import com.sdu.share.expense.ui.components.TwoNavigationButtonInRow
@@ -25,7 +30,7 @@ fun SignUpScreen(
 @Composable
 fun PersonalDetailsScreen(
     onCancelButtonClicked: () -> Unit,
-    onNextButtonClicked: () -> Unit,
+    onNextButtonClicked: (firstName: String, lastName: String, email: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var firstName by remember {
@@ -66,7 +71,7 @@ fun PersonalDetailsScreen(
             firstButtonLabel = R.string.cancel_button_label,
             secondButtonLabel = R.string.next_button_label,
             onFirstButtonClicked = onCancelButtonClicked,
-            onSecondButtonClicked = onNextButtonClicked
+            onSecondButtonClicked = { onNextButtonClicked(firstName, lastName, email) }
         )
     }
 }
@@ -76,14 +81,14 @@ fun PersonalDetailsScreen(
 fun PersonalDetailsScreenPreview() {
     PersonalDetailsScreen(
         onCancelButtonClicked = {},
-        onNextButtonClicked = {}
+        onNextButtonClicked = { _, _, _ -> }
     )
 }
 
 @Composable
 fun AccountDetailsScreen(
     onCancelButtonClicked: () -> Unit,
-    onNextButtonClicked: () -> Unit,
+    onNextButtonClicked: (username: String, password: String, reTypedPassword: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var username by remember {
@@ -117,7 +122,7 @@ fun AccountDetailsScreen(
             firstButtonLabel = R.string.cancel_button_label,
             secondButtonLabel = R.string.create_account_button_label,
             onFirstButtonClicked = onCancelButtonClicked,
-            onSecondButtonClicked = onNextButtonClicked
+            onSecondButtonClicked = { onNextButtonClicked(username, password, reTypedPassword) }
         )
     }
 }
@@ -127,6 +132,31 @@ fun AccountDetailsScreen(
 fun AccountDetailsScreenPreview() {
     AccountDetailsScreen(
         onCancelButtonClicked = {},
-        onNextButtonClicked = {}
+        onNextButtonClicked = { _, _, _ -> }
     )
+}
+
+@Composable
+fun SignUpSummaryScreen(
+    signUpData: SignUpData,
+    modifier: Modifier = Modifier
+) {
+    val items = listOf(
+        Pair(stringResource(R.string.first_name_sign_up_summary_label), signUpData.firstName),
+        Pair(stringResource(R.string.last_name_sign_up_summary_label), signUpData.lastName),
+        Pair(stringResource(R.string.email_sign_up_summary_label), signUpData.email),
+        Pair(stringResource(R.string.username_sign_up_summary_label), signUpData.username),
+        Pair(
+            stringResource(R.string.should_send_notifications_sign_up_summary_label),
+            if (signUpData.shouldSendNotification) "true" else "false"
+        )
+    )
+
+    Column(modifier = modifier) {
+        items.forEach { item ->
+            Text(item.first.uppercase())
+            Text(text = item.second, fontWeight = FontWeight.Bold)
+            Divider(thickness = 1.dp)
+        }
+    }
 }
