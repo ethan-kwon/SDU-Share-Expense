@@ -1,55 +1,24 @@
 package com.sdu.share.expense.ui.screens
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sdu.share.expense.ui.models.SignUpViewModel
 import com.sdu.share.expense.ui.navigation.ShareExpenseScreen
+import com.sdu.share.expense.ui.navigation.components.ShareExpenseBottomBar
+import com.sdu.share.expense.ui.navigation.components.ShareExpenseTopBar
 import com.sdu.share.expense.ui.navigation.entryAppGraph
+import com.sdu.share.expense.ui.navigation.mainAppGraph
 
-
-@Composable
-fun ShareExpenseAppTopBar(
-    currentScreen: ShareExpenseScreen,
-    canNavigateBack: Boolean,
-    navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        modifier = modifier,
-        navigationIcon = {
-            if (canNavigateBack) {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Go back"
-                    )
-                }
-            }
-        }
-    )
-}
 
 @Composable
 fun ShareExpenseApp(
@@ -64,11 +33,21 @@ fun ShareExpenseApp(
 
     Scaffold(
         topBar = {
-            ShareExpenseAppTopBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
-            )
+            if (shouldTopBarBeDisplayed(currentScreen)) {
+                ShareExpenseTopBar(
+                    currentScreen = currentScreen,
+                    canNavigateBack = navController.previousBackStackEntry != null,
+                    navigateUp = { navController.navigateUp() }
+                )
+            }
+        }, bottomBar = {
+            if (shouldBottomBarBeDisplayed(currentScreen)) {
+                ShareExpenseBottomBar(
+                    switchScreen = {
+                        bottomBarSwitchScreen(navController, currentScreen)
+                    }
+                )
+            }
         }
     ) { innerPadding ->
         NavHost(
@@ -82,18 +61,55 @@ fun ShareExpenseApp(
                 setPersonalDetails = { firstName: String, lastName: String, email: String ->
                     signUpViewModel.setPersonalDetails(firstName, lastName, email)
                 },
-                setAccountDetails = { username: String, password: String, reTypedPassword: String ->
+                setAccountDetails = { username: String,
+                                      password: String,
+                                      reTypedPassword: String,
+                                      shouldSendNotifications: Boolean ->
                     signUpViewModel.setAccountDetails(
-                        username,
-                        password,
-                        reTypedPassword, /*TODO*/
-                        false
+                        username, password, reTypedPassword, shouldSendNotifications
                     )
                 },
                 resetViewModel = {
                     signUpViewModel.resetSignUpData()
+                }, saveAccount = {
+                    /*TODO*/
                 }
             )
+            mainAppGraph(
+
+            )
         }
+    }
+}
+
+private fun shouldTopBarBeDisplayed(currentScreen: ShareExpenseScreen): Boolean {
+    return currentScreen == ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN ||
+            currentScreen == ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN ||
+            currentScreen == ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN
+}
+
+private fun shouldBottomBarBeDisplayed(currentScreen: ShareExpenseScreen): Boolean {
+    return currentScreen == ShareExpenseScreen.HOME_SCREEN ||
+            currentScreen == ShareExpenseScreen.PROFILE_SCREEN
+}
+
+private fun bottomBarSwitchScreen(
+    navController: NavHostController,
+    currentScreen: ShareExpenseScreen
+) {
+    if (currentScreen == ShareExpenseScreen.HOME_SCREEN) {
+        bottomBarNavigate(navController, ShareExpenseScreen.PROFILE_SCREEN.name)
+    } else {
+        bottomBarNavigate(navController, ShareExpenseScreen.HOME_SCREEN.name)
+    }
+}
+
+private fun bottomBarNavigate(navController: NavHostController, route: String) {
+    navController.navigate(route) {
+        popUpTo(navController.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }

@@ -15,7 +15,12 @@ fun NavGraphBuilder.entryAppGraph(
     navController: NavHostController,
     signUpData: SignUpData,
     setPersonalDetails: (firstName: String, lastName: String, email: String) -> Unit,
-    setAccountDetails: (username: String, password: String, reTypedPassword: String) -> Unit,
+    setAccountDetails: (
+        username: String,
+        password: String,
+        reTypedPassword: String, shouldSendNotifications: Boolean
+    ) -> Unit,
+    saveAccount: () -> Unit,
     resetViewModel: () -> Unit
 ) {
     composable(route = ShareExpenseScreen.WELCOME_SCREEN.name) {
@@ -48,14 +53,23 @@ fun NavGraphBuilder.entryAppGraph(
             onCancelButtonClicked = {
                 cancelSigningUpAndNavigateToWelcomeScreen(resetViewModel, navController)
             },
-            onNextButtonClicked = { username, password, reTypedPassword ->
-                setAccountDetails(username, password, reTypedPassword)
+            onNextButtonClicked = { username, password, reTypedPassword, shouldSendNotifications ->
+                setAccountDetails(username, password, reTypedPassword, shouldSendNotifications)
                 navController.navigate(ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name)
             })
     }
     composable(route = ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name) {
         SignUpSummaryScreen(
-            signUpData = signUpData
+            signUpData = signUpData,
+            onCreateAccountButtonClicked = {
+                saveAccount()
+                navController.navigate(ShareExpenseScreen.HOME_SCREEN.name)
+            },
+            onCancelButtonClicked = {
+                cancelSigningUpAndNavigateToWelcomeScreen(
+                    resetViewModel, navController
+                )
+            }
         )
     }
 }

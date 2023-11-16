@@ -1,6 +1,9 @@
 package com.sdu.share.expense.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -88,7 +91,12 @@ fun PersonalDetailsScreenPreview() {
 @Composable
 fun AccountDetailsScreen(
     onCancelButtonClicked: () -> Unit,
-    onNextButtonClicked: (username: String, password: String, reTypedPassword: String) -> Unit,
+    onNextButtonClicked: (
+        username: String,
+        password: String,
+        reTypedPassword: String,
+        shouldSendNotifications: Boolean
+    ) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var username by remember {
@@ -101,6 +109,10 @@ fun AccountDetailsScreen(
 
     var reTypedPassword by remember {
         mutableStateOf("")
+    }
+
+    var shouldSendNotifications by remember {
+        mutableStateOf(false)
     }
 
     Column(modifier = modifier) {
@@ -118,11 +130,20 @@ fun AccountDetailsScreen(
             onPasswordChange = { reTypedPassword = it; },
             labelId = R.string.retype_password_input_label
         )
+        Row {
+            Text(stringResource(R.string.should_send_notifications_label))
+            Checkbox(
+                checked = shouldSendNotifications,
+                onCheckedChange = { shouldSendNotifications = it }
+            )
+        }
         TwoNavigationButtonInRow(
             firstButtonLabel = R.string.cancel_button_label,
-            secondButtonLabel = R.string.create_account_button_label,
+            secondButtonLabel = R.string.next_button_label,
             onFirstButtonClicked = onCancelButtonClicked,
-            onSecondButtonClicked = { onNextButtonClicked(username, password, reTypedPassword) }
+            onSecondButtonClicked = {
+                onNextButtonClicked(username, password, reTypedPassword, shouldSendNotifications)
+            }
         )
     }
 }
@@ -132,13 +153,15 @@ fun AccountDetailsScreen(
 fun AccountDetailsScreenPreview() {
     AccountDetailsScreen(
         onCancelButtonClicked = {},
-        onNextButtonClicked = { _, _, _ -> }
+        onNextButtonClicked = { _, _, _, _ -> }
     )
 }
 
 @Composable
 fun SignUpSummaryScreen(
     signUpData: SignUpData,
+    onCancelButtonClicked: () -> Unit,
+    onCreateAccountButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val items = listOf(
@@ -158,5 +181,11 @@ fun SignUpSummaryScreen(
             Text(text = item.second, fontWeight = FontWeight.Bold)
             Divider(thickness = 1.dp)
         }
+        Spacer(modifier = Modifier)
+        TwoNavigationButtonInRow(
+            firstButtonLabel = R.string.cancel_button_label,
+            secondButtonLabel = R.string.create_account_button_label,
+            onFirstButtonClicked = onCancelButtonClicked,
+            onSecondButtonClicked = { onCreateAccountButtonClicked() })
     }
 }

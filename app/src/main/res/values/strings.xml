@@ -8,6 +8,12 @@
     <string name="sign_up_personal_details_screen">Personal details</string>
     <string name="sign_up_account_details_screen">Account details</string>
     <string name="sign_up_summary_screen">Sign up summary</string>
+    <string name="home_screen">Home</string>
+    <string name="profile_screen">Profile</string>
+
+    <!-- Navigation bar item names -->
+    <string name="home_navigation_bar_item_text">Home</string>
+    <string name="profile_navigation_bar_item_text">Profile</string>
 
     <!-- Input labels -->
     <string name="username_input_label">Username</string>
@@ -17,6 +23,7 @@
     <string name="first_name_input_label">First name</string>
     <string name="last_name_input_label">Last name</string>
     <string name="email_input_label">E-mail</string>
+    <string name="should_send_notifications_label">Should send notifications?</string>
 
     <!-- Button labels -->
     <string name="sign_in_button_label">Sign in</string>
