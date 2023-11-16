@@ -1,6 +1,5 @@
 package com.sdu.share.expense.ui.screens
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,19 +18,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sdu.share.expense.R
 import com.sdu.share.expense.ui.models.SignUpViewModel
+import com.sdu.share.expense.ui.navigation.EntryAppGraph
+import com.sdu.share.expense.ui.navigation.ShareExpenseScreen
 
-enum class ShareExpenseScreen(@StringRes val title: Int) {
-    WELCOME_SCREEN(R.string.welcome_screen),
-    SIGN_IN_SCREEN(R.string.sign_in_screen),
-    SIGN_UP_PERSONAL_DETAILS_SCREEN(R.string.sign_up_personal_details_screen),
-    SIGN_UP_ACCOUNT_DETAILS_SCREEN(R.string.sign_up_account_details_screen),
-    SIGN_UP_SUMMARY_SCREEN(R.string.sign_up_summary_screen)
-}
 
 @Composable
 fun ShareExpenseAppTopBar(
@@ -61,14 +53,14 @@ fun ShareExpenseAppTopBar(
 
 @Composable
 fun ShareExpenseApp(
-    viewModel: SignUpViewModel = viewModel(),
+    signUpViewModel: SignUpViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = ShareExpenseScreen.valueOf(
         backStackEntry?.destination?.route ?: ShareExpenseScreen.WELCOME_SCREEN.name
     )
-    val uiState by viewModel.uiState.collectAsState()
+    val signUpUiState by signUpViewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -84,39 +76,24 @@ fun ShareExpenseApp(
             startDestination = ShareExpenseScreen.WELCOME_SCREEN.name,
             modifier = Modifier.padding(innerPadding)
         ) {
-
-            composable(route = ShareExpenseScreen.WELCOME_SCREEN.name) {
-                WelcomeScreen(
-                    onSignInButtonClick = { navController.navigate(ShareExpenseScreen.SIGN_IN_SCREEN.name) },
-                    onSignUpButtonClick = { navController.navigate(ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) }
-                )
-            }
-            composable(route = ShareExpenseScreen.SIGN_IN_SCREEN.name) {
-                SignInScreen(
-
-                )
-            }
-            composable(route = ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) {
-                PersonalDetailsScreen(
-                    onCancelButtonClicked = { /*TODO*/ },
-                    onNextButtonClicked = { firstName, lastName, email ->
-                        viewModel.setPersonalDetails(firstName, lastName, email)
-                        navController.navigate(ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name)
-                    })
-            }
-            composable(route = ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name) {
-                AccountDetailsScreen(
-                    onCancelButtonClicked = { /*TODO*/ },
-                    onNextButtonClicked = { username, password, reTypedPassword ->
-                        viewModel.setAccountDetails(username, password, reTypedPassword, false)
-                        navController.navigate(ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name)
-                    })
-            }
-            composable(route = ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name) {
-                SignUpSummaryScreen(
-                    signUpData = uiState
-                )
-            }
+            EntryAppGraph(
+                navController = navController,
+                signUpData = signUpUiState,
+                setPersonalDetails = { firstName: String, lastName: String, email: String ->
+                    signUpViewModel.setPersonalDetails(firstName, lastName, email)
+                },
+                setAccountDetails = { username: String, password: String, reTypedPassword: String ->
+                    signUpViewModel.setAccountDetails(
+                        username,
+                        password,
+                        reTypedPassword, /*TODO*/
+                        false
+                    )
+                },
+                resetViewModel = {
+                    signUpViewModel.resetSignUpData()
+                }
+            )
         }
     }
 }
