@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.sdu.share.expense.R
 import com.sdu.share.expense.ui.components.PasswordTextField
+import com.sdu.share.expense.ui.components.UiText
 import com.sdu.share.expense.ui.components.UsernameTextField
 
 @Composable
@@ -29,6 +30,8 @@ fun SignInScreen(
 
     Column {
         UsernameTextField(
+            errorMessageId = UiText.DynamicString(""),
+            isError = false,
             username = username,
             onUsernameChange = { username = it }
         )

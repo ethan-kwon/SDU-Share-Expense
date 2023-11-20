@@ -3,7 +3,7 @@ package com.sdu.share.expense.ui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.sdu.share.expense.models.SignUpData
+import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.screens.AccountDetailsScreen
 import com.sdu.share.expense.ui.screens.PersonalDetailsScreen
 import com.sdu.share.expense.ui.screens.SignInScreen
@@ -13,15 +13,7 @@ import com.sdu.share.expense.ui.screens.WelcomeScreen
 
 fun NavGraphBuilder.entryAppGraph(
     navController: NavHostController,
-    signUpData: SignUpData,
-    setPersonalDetails: (firstName: String, lastName: String, email: String) -> Unit,
-    setAccountDetails: (
-        username: String,
-        password: String,
-        reTypedPassword: String, shouldSendNotifications: Boolean
-    ) -> Unit,
-    saveAccount: () -> Unit,
-    resetViewModel: () -> Unit
+    signUpViewModel: SignUpViewModel,
 ) {
     composable(route = ShareExpenseScreen.WELCOME_SCREEN.name) {
         WelcomeScreen(
@@ -40,44 +32,38 @@ fun NavGraphBuilder.entryAppGraph(
     }
     composable(route = ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) {
         PersonalDetailsScreen(
+            signUpViewModel = signUpViewModel,
             onCancelButtonClicked = {
-                cancelSigningUpAndNavigateToWelcomeScreen(resetViewModel, navController)
+                navigateToWelcomeScreen(navController)
             },
-            onNextButtonClicked = { firstName, lastName, email ->
-                setPersonalDetails(firstName, lastName, email)
+            onNextButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name)
             })
     }
     composable(route = ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name) {
         AccountDetailsScreen(
+            signUpViewModel = signUpViewModel,
             onCancelButtonClicked = {
-                cancelSigningUpAndNavigateToWelcomeScreen(resetViewModel, navController)
+                navigateToWelcomeScreen(navController)
             },
-            onNextButtonClicked = { username, password, reTypedPassword, shouldSendNotifications ->
-                setAccountDetails(username, password, reTypedPassword, shouldSendNotifications)
+            onNextButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name)
             })
     }
     composable(route = ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name) {
         SignUpSummaryScreen(
-            signUpData = signUpData,
+            signUpViewModel = signUpViewModel,
             onCreateAccountButtonClicked = {
-                saveAccount()
                 navController.navigate(ShareExpenseScreen.HOME_SCREEN.name)
             },
             onCancelButtonClicked = {
-                cancelSigningUpAndNavigateToWelcomeScreen(
-                    resetViewModel, navController
-                )
+                navigateToWelcomeScreen(navController)
             }
         )
+
     }
 }
 
-private fun cancelSigningUpAndNavigateToWelcomeScreen(
-    resetViewModel: () -> Unit,
-    navController: NavHostController
-) {
-    resetViewModel()
+private fun navigateToWelcomeScreen(navController: NavHostController) {
     navController.popBackStack(ShareExpenseScreen.WELCOME_SCREEN.name, inclusive = false)
 }

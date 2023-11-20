@@ -3,7 +3,6 @@ package com.sdu.share.expense.ui.screens
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -12,7 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sdu.share.expense.ui.models.SignUpViewModel
+import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.navigation.ShareExpenseScreen
 import com.sdu.share.expense.ui.navigation.components.ShareExpenseBottomBar
 import com.sdu.share.expense.ui.navigation.components.ShareExpenseTopBar
@@ -22,14 +21,13 @@ import com.sdu.share.expense.ui.navigation.mainAppGraph
 
 @Composable
 fun ShareExpenseApp(
-    signUpViewModel: SignUpViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = ShareExpenseScreen.valueOf(
         backStackEntry?.destination?.route ?: ShareExpenseScreen.WELCOME_SCREEN.name
     )
-    val signUpUiState by signUpViewModel.uiState.collectAsState()
+    val signUpViewModel = viewModel<SignUpViewModel>()
 
     Scaffold(
         topBar = {
@@ -57,23 +55,7 @@ fun ShareExpenseApp(
         ) {
             entryAppGraph(
                 navController = navController,
-                signUpData = signUpUiState,
-                setPersonalDetails = { firstName: String, lastName: String, email: String ->
-                    signUpViewModel.setPersonalDetails(firstName, lastName, email)
-                },
-                setAccountDetails = { username: String,
-                                      password: String,
-                                      reTypedPassword: String,
-                                      shouldSendNotifications: Boolean ->
-                    signUpViewModel.setAccountDetails(
-                        username, password, reTypedPassword, shouldSendNotifications
-                    )
-                },
-                resetViewModel = {
-                    signUpViewModel.resetSignUpData()
-                }, saveAccount = {
-                    /*TODO*/
-                }
+                signUpViewModel = signUpViewModel
             )
             mainAppGraph(
 

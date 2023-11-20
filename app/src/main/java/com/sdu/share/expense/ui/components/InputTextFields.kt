@@ -25,8 +25,10 @@ import com.sdu.share.expense.R
 fun EditTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
+    errorMessageId: UiText?,
     keyboardType: KeyboardType,
     value: String,
+    shouldErrorBeDisplayed: Boolean,
     onValueChange: (String) -> Unit,
     isFinalField: Boolean,
     modifier: Modifier = Modifier
@@ -41,12 +43,18 @@ fun EditTextField(
             )
         },
         label = { Text(stringResource(labelId)) },
+        supportingText = {
+            if (shouldErrorBeDisplayed && errorMessageId != null) {
+                Text(errorMessageId.asString())
+            }
+        },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = keyboardType,
             imeAction = imeAction
         ),
         value = value,
+        isError = shouldErrorBeDisplayed && errorMessageId != null,
         onValueChange = onValueChange,
         modifier = modifier
     )
@@ -56,17 +64,20 @@ fun EditTextField(
 fun GenericTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
+    errorMessageId: UiText?,
     value: String,
+    isError: Boolean,
     onValueChange: (String) -> Unit,
     isFinalField: Boolean,
     modifier: Modifier = Modifier
-
 ) {
     EditTextField(
         labelId = labelId,
         leadingIconId = leadingIconId,
+        errorMessageId = errorMessageId,
         keyboardType = KeyboardType.Text,
         value = value,
+        shouldErrorBeDisplayed = isError,
         onValueChange = onValueChange,
         isFinalField = isFinalField,
         modifier = modifier
@@ -75,7 +86,9 @@ fun GenericTextField(
 
 @Composable
 fun UsernameTextField(
+    errorMessageId: UiText?,
     username: String,
+    isError: Boolean,
     onUsernameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isFinalField: Boolean = false
@@ -83,7 +96,9 @@ fun UsernameTextField(
     GenericTextField(
         labelId = R.string.username_input_label,
         leadingIconId = R.drawable.account_circle_24px,
+        errorMessageId = errorMessageId,
         value = username,
+        isError = isError,
         onValueChange = onUsernameChange,
         isFinalField = isFinalField,
         modifier = modifier
@@ -100,14 +115,18 @@ fun EditPasswordTextField(
     modifier: Modifier = Modifier
 ) {
     var isPasswordVisible by remember {
-        mutableStateOf(false);
+        mutableStateOf(false)
     }
-
     val trailingIconId =
-        if (isPasswordVisible) R.drawable.visibility_24px else R.drawable.visibility_off_24px
+        if (isPasswordVisible) R.drawable.visibility_24px
+        else R.drawable.visibility_off_24px
     val trailingIcon = painterResource(trailingIconId)
 
     val imeAction = if (isFinalField) ImeAction.Done else ImeAction.Next
+
+    val visualTransformation =
+        if (!isPasswordVisible) PasswordVisualTransformation()
+        else VisualTransformation.None
 
     TextField(
         leadingIcon = {
@@ -134,7 +153,7 @@ fun EditPasswordTextField(
         ),
         value = value,
         onValueChange = onValueChange,
-        visualTransformation = if (!isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+        visualTransformation = visualTransformation,
         modifier = modifier
     )
 }
