@@ -13,7 +13,7 @@ import com.sdu.share.expense.validation.cases.UsernameValidator
 class SignUpViewModel : ViewModel() {
     var formState by mutableStateOf(SignUpViewModelState())
     var shouldShowPersonalDetailsErrors by mutableStateOf(false)
-    var hasAccountDataBeenSubmitted by mutableStateOf(false)
+    var shouldShowAccountDetailsErrors by mutableStateOf(false)
 
     private val nameValidator = NameValidator()
     private val emailValidator = EmailValidator()
@@ -61,10 +61,10 @@ class SignUpViewModel : ViewModel() {
             }
 
             is SignUpEvent.AccountDataScreenNextButtonClicked -> {
-                hasAccountDataBeenSubmitted = true
+                shouldShowAccountDetailsErrors = true
 
                 if (validateAccountDetails()) {
-                    hasAccountDataBeenSubmitted = false
+                    shouldShowAccountDetailsErrors = false
                     event.navigateTo()
                 }
             }

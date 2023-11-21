@@ -33,20 +33,20 @@ fun NavGraphBuilder.entryAppGraph(
     composable(route = ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) {
         PersonalDetailsScreen(
             signUpViewModel = signUpViewModel,
-            onCancelButtonClicked = {
+            onCancelButtonClickedNavigateTo = {
                 navigateToWelcomeScreen(navController)
             },
-            onNextButtonClicked = {
+            onNextButtonClickedNavigateTo = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name)
             })
     }
     composable(route = ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name) {
         AccountDetailsScreen(
             signUpViewModel = signUpViewModel,
-            onCancelButtonClicked = {
+            onCancelButtonClickedNavigateTo = {
                 navigateToWelcomeScreen(navController)
             },
-            onNextButtonClicked = {
+            onNextButtonClickedNavigateTo = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name)
             })
     }

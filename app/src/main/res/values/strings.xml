@@ -45,7 +45,7 @@
     <string name="field_needs_at_least_x_chars_error">The %s needs to consist of at least %d characters</string>
     <string name="username_is_invalid_error">Username can only contain letters, digits, hyphen or underscore</string>
     <string name="password_needs_one_letter_and_digit_error">The password needs to contain at least one upper-case letter and digit</string>
-    <string name="passwords_do_not_match_error">Those passwords do not match</string>
+    <string name="passwords_do_not_match_error">Password confirmation does not match</string>
 
 
 </resources>

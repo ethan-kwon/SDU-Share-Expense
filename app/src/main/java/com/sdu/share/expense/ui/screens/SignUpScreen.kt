@@ -23,45 +23,45 @@ import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 @Composable
 fun PersonalDetailsScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClicked: () -> Unit,
-    onNextButtonClicked: () -> Unit,
+    onCancelButtonClickedNavigateTo: () -> Unit,
+    onNextButtonClickedNavigateTo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         GenericTextField(
             labelId = R.string.first_name_input_label,
             leadingIconId = R.drawable.badge_24px,
-            errorMessageId = signUpViewModel.formState.firstNameError,
+            errorMessage = signUpViewModel.formState.firstNameError,
             value = signUpViewModel.formState.firstName,
-            isError = signUpViewModel.shouldShowPersonalDetailsErrors,
+            shouldErrorBeDisplayed = signUpViewModel.shouldShowPersonalDetailsErrors,
             onValueChange = { signUpViewModel.onEvent(SignUpEvent.FirstNameHasChanged(it)) },
             isFinalField = false
         )
         GenericTextField(
             labelId = R.string.last_name_input_label,
             leadingIconId = R.drawable.badge_24px,
-            errorMessageId = signUpViewModel.formState.lastNameError,
+            errorMessage = signUpViewModel.formState.lastNameError,
             value = signUpViewModel.formState.lastName,
-            isError = signUpViewModel.shouldShowPersonalDetailsErrors,
+            shouldErrorBeDisplayed = signUpViewModel.shouldShowPersonalDetailsErrors,
             onValueChange = { signUpViewModel.onEvent(SignUpEvent.LastNameHasChanged(it)) },
             isFinalField = false
         )
         GenericTextField(
             labelId = R.string.email_input_label,
             leadingIconId = R.drawable.badge_24px,
-            errorMessageId = signUpViewModel.formState.emailError,
+            errorMessage = signUpViewModel.formState.emailError,
             value = signUpViewModel.formState.email,
-            isError = signUpViewModel.shouldShowPersonalDetailsErrors,
+            shouldErrorBeDisplayed = signUpViewModel.shouldShowPersonalDetailsErrors,
             onValueChange = { signUpViewModel.onEvent(SignUpEvent.EmailHasChanged(it)) },
             isFinalField = false
         )
         TwoNavigationButtonInRow(
             firstButtonLabel = R.string.cancel_button_label,
             secondButtonLabel = R.string.next_button_label,
-            onFirstButtonClicked = onCancelButtonClicked,
+            onFirstButtonClicked = onCancelButtonClickedNavigateTo,
             onSecondButtonClicked = {
                 signUpViewModel.onEvent(
-                    SignUpEvent.PersonalDataScreenNextButtonClicked(onNextButtonClicked)
+                    SignUpEvent.PersonalDataScreenNextButtonClicked(onNextButtonClickedNavigateTo)
                 )
             }
         )
@@ -73,34 +73,38 @@ fun PersonalDetailsScreen(
 fun PersonalDetailsScreenPreview() {
     PersonalDetailsScreen(
         signUpViewModel = SignUpViewModel(),
-        onCancelButtonClicked = {},
-        onNextButtonClicked = {}
+        onCancelButtonClickedNavigateTo = {},
+        onNextButtonClickedNavigateTo = {}
     )
 }
 
 @Composable
 fun AccountDetailsScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClicked: () -> Unit,
-    onNextButtonClicked: () -> Unit,
+    onCancelButtonClickedNavigateTo: () -> Unit,
+    onNextButtonClickedNavigateTo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         UsernameTextField(
-            errorMessageId = signUpViewModel.formState.usernameError,
+            errorMessage = signUpViewModel.formState.usernameError,
             username = signUpViewModel.formState.username,
-            isError = signUpViewModel.hasAccountDataBeenSubmitted,
+            shouldErrorBeDisplayed = signUpViewModel.shouldShowAccountDetailsErrors,
             onUsernameChange = { signUpViewModel.onEvent(SignUpEvent.UsernameHasChanged(it)) }
         )
         PasswordTextField(
+            labelId = R.string.new_password_input_label,
+            errorMessage = signUpViewModel.formState.passwordError,
             password = signUpViewModel.formState.password,
+            shouldErrorBeDisplayed = signUpViewModel.shouldShowAccountDetailsErrors,
             onPasswordChange = { signUpViewModel.onEvent(SignUpEvent.PasswordHasChanged(it)) },
-            labelId = R.string.new_password_input_label
         )
         PasswordTextField(
+            labelId = R.string.retype_password_input_label,
+            errorMessage = signUpViewModel.formState.retypedPasswordError,
             password = signUpViewModel.formState.retypedPassword,
+            shouldErrorBeDisplayed = signUpViewModel.shouldShowAccountDetailsErrors,
             onPasswordChange = { signUpViewModel.onEvent(SignUpEvent.RetypedPasswordHasChanged(it)) },
-            labelId = R.string.retype_password_input_label
         )
         Row {
             Text(stringResource(R.string.should_send_notifications_label))
@@ -114,10 +118,10 @@ fun AccountDetailsScreen(
         TwoNavigationButtonInRow(
             firstButtonLabel = R.string.cancel_button_label,
             secondButtonLabel = R.string.next_button_label,
-            onFirstButtonClicked = onCancelButtonClicked,
+            onFirstButtonClicked = onCancelButtonClickedNavigateTo,
             onSecondButtonClicked = {
                 signUpViewModel.onEvent(
-                    SignUpEvent.AccountDataScreenNextButtonClicked(onNextButtonClicked)
+                    SignUpEvent.AccountDataScreenNextButtonClicked(onNextButtonClickedNavigateTo)
                 )
             }
         )
@@ -129,8 +133,8 @@ fun AccountDetailsScreen(
 fun AccountDetailsScreenPreview() {
     AccountDetailsScreen(
         signUpViewModel = SignUpViewModel(),
-        onCancelButtonClicked = {},
-        onNextButtonClicked = {}
+        onCancelButtonClickedNavigateTo = {},
+        onNextButtonClickedNavigateTo = {}
     )
 }
 

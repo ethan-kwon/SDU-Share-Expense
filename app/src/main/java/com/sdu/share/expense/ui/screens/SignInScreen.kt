@@ -28,16 +28,19 @@ fun SignInScreen(
         mutableStateOf("")
     }
 
+    /*TODO: Make sign in view model*/
     Column {
         UsernameTextField(
-            errorMessageId = UiText.DynamicString(""),
-            isError = false,
+            errorMessage = UiText.DynamicString(""),
+            shouldErrorBeDisplayed = false,
             username = username,
             onUsernameChange = { username = it }
         )
         PasswordTextField(
             labelId = R.string.password_input_label,
+            errorMessage = UiText.DynamicString(""),
             password = password,
+            shouldErrorBeDisplayed = false,
             onPasswordChange = { password = it }
         )
         Button(onClick = { /*TODO*/ }) {

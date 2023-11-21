@@ -25,7 +25,7 @@ import com.sdu.share.expense.R
 fun EditTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
-    errorMessageId: UiText?,
+    errorMessage: UiText?,
     keyboardType: KeyboardType,
     value: String,
     shouldErrorBeDisplayed: Boolean,
@@ -44,8 +44,8 @@ fun EditTextField(
         },
         label = { Text(stringResource(labelId)) },
         supportingText = {
-            if (shouldErrorBeDisplayed && errorMessageId != null) {
-                Text(errorMessageId.asString())
+            if (shouldErrorBeDisplayed && errorMessage != null) {
+                Text(errorMessage.asString())
             }
         },
         singleLine = true,
@@ -54,7 +54,7 @@ fun EditTextField(
             imeAction = imeAction
         ),
         value = value,
-        isError = shouldErrorBeDisplayed && errorMessageId != null,
+        isError = shouldErrorBeDisplayed && errorMessage != null,
         onValueChange = onValueChange,
         modifier = modifier
     )
@@ -64,9 +64,9 @@ fun EditTextField(
 fun GenericTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
-    errorMessageId: UiText?,
+    errorMessage: UiText?,
     value: String,
-    isError: Boolean,
+    shouldErrorBeDisplayed: Boolean,
     onValueChange: (String) -> Unit,
     isFinalField: Boolean,
     modifier: Modifier = Modifier
@@ -74,10 +74,10 @@ fun GenericTextField(
     EditTextField(
         labelId = labelId,
         leadingIconId = leadingIconId,
-        errorMessageId = errorMessageId,
+        errorMessage = errorMessage,
         keyboardType = KeyboardType.Text,
         value = value,
-        shouldErrorBeDisplayed = isError,
+        shouldErrorBeDisplayed = shouldErrorBeDisplayed,
         onValueChange = onValueChange,
         isFinalField = isFinalField,
         modifier = modifier
@@ -86,9 +86,9 @@ fun GenericTextField(
 
 @Composable
 fun UsernameTextField(
-    errorMessageId: UiText?,
+    errorMessage: UiText?,
     username: String,
-    isError: Boolean,
+    shouldErrorBeDisplayed: Boolean,
     onUsernameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isFinalField: Boolean = false
@@ -96,9 +96,9 @@ fun UsernameTextField(
     GenericTextField(
         labelId = R.string.username_input_label,
         leadingIconId = R.drawable.account_circle_24px,
-        errorMessageId = errorMessageId,
+        errorMessage = errorMessage,
         value = username,
-        isError = isError,
+        shouldErrorBeDisplayed = shouldErrorBeDisplayed,
         onValueChange = onUsernameChange,
         isFinalField = isFinalField,
         modifier = modifier
@@ -109,7 +109,9 @@ fun UsernameTextField(
 fun EditPasswordTextField(
     @StringRes labelId: Int,
     @DrawableRes leadingIconId: Int,
+    errorMessage: UiText?,
     value: String,
+    shouldErrorBeDisplayed: Boolean,
     onValueChange: (String) -> Unit,
     isFinalField: Boolean,
     modifier: Modifier = Modifier
@@ -146,12 +148,18 @@ fun EditPasswordTextField(
             }
         },
         label = { Text(stringResource(labelId)) },
+        supportingText = {
+            if (shouldErrorBeDisplayed && errorMessage != null) {
+                Text(errorMessage.asString())
+            }
+        },
         singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Password,
             imeAction = imeAction
         ),
         value = value,
+        isError = shouldErrorBeDisplayed && errorMessage != null,
         onValueChange = onValueChange,
         visualTransformation = visualTransformation,
         modifier = modifier
@@ -161,7 +169,9 @@ fun EditPasswordTextField(
 @Composable
 fun PasswordTextField(
     @StringRes labelId: Int,
+    errorMessage: UiText?,
     password: String,
+    shouldErrorBeDisplayed: Boolean,
     onPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isFinalField: Boolean = true
@@ -169,7 +179,9 @@ fun PasswordTextField(
     EditPasswordTextField(
         labelId = labelId,
         leadingIconId = R.drawable.lock_24px,
+        errorMessage = errorMessage,
         value = password,
+        shouldErrorBeDisplayed = shouldErrorBeDisplayed,
         onValueChange = onPasswordChange,
         isFinalField = isFinalField,
         modifier = modifier
