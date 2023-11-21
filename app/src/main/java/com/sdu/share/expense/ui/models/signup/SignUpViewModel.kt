@@ -4,22 +4,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.sdu.share.expense.validation.cases.ValidationEmailCase
-import com.sdu.share.expense.validation.cases.ValidationNameCase
-import com.sdu.share.expense.validation.cases.ValidationPasswordCase
-import com.sdu.share.expense.validation.cases.ValidationRetypedPasswordCase
-import com.sdu.share.expense.validation.cases.ValidationUsernameCase
+import com.sdu.share.expense.validation.cases.EmailValidator
+import com.sdu.share.expense.validation.cases.NameValidator
+import com.sdu.share.expense.validation.cases.PasswordValidator
+import com.sdu.share.expense.validation.cases.RetypedPasswordValidator
+import com.sdu.share.expense.validation.cases.UsernameValidator
 
 class SignUpViewModel : ViewModel() {
     var formState by mutableStateOf(SignUpViewModelState())
     var shouldShowPersonalDetailsErrors by mutableStateOf(false)
     var hasAccountDataBeenSubmitted by mutableStateOf(false)
 
-    private val nameValidator = ValidationNameCase()
-    private val emailValidator = ValidationEmailCase()
-    private val usernameValidator = ValidationUsernameCase()
-    private val passwordValidator = ValidationPasswordCase()
-    private val retypedPasswordValidator = ValidationRetypedPasswordCase()
+    private val nameValidator = NameValidator()
+    private val emailValidator = EmailValidator()
+    private val usernameValidator = UsernameValidator()
+    private val passwordValidator = PasswordValidator()
+    private val retypedPasswordValidator = RetypedPasswordValidator()
 
     fun onEvent(event: SignUpEvent) {
         when (event) {
