@@ -4,7 +4,7 @@ import com.sdu.share.expense.R
 import com.sdu.share.expense.ui.components.UiText
 import com.sdu.share.expense.validation.ValidationResult
 
-abstract class BaseValidator<In, Out>(protected val fieldName: String) {
+abstract class BaseValidator<In, Out>(private val fieldName: String) {
 
     abstract fun execute(input: In): Out
 

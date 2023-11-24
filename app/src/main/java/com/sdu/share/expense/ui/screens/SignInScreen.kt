@@ -1,56 +1,58 @@
 package com.sdu.share.expense.ui.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.sdu.share.expense.R
 import com.sdu.share.expense.ui.components.PasswordTextField
-import com.sdu.share.expense.ui.components.UiText
+import com.sdu.share.expense.ui.components.TwoNavigationButtonInRow
 import com.sdu.share.expense.ui.components.UsernameTextField
+import com.sdu.share.expense.ui.models.signin.SignInEvent
+import com.sdu.share.expense.ui.models.signin.SignInViewModel
 
 @Composable
 fun SignInScreen(
+    signInViewModel: SignInViewModel,
+    onCancelButtonClickedNavigateTo: () -> Unit,
+    onSignInButtonClickedNavigateTo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var username by remember {
-        mutableStateOf("")
-    }
-
-    var password by remember {
-        mutableStateOf("")
-    }
-
-    /*TODO: Make sign in view model*/
-    Column {
+    Column(modifier = modifier) {
         UsernameTextField(
-            errorMessage = UiText.DynamicString(""),
-            shouldErrorBeDisplayed = false,
-            username = username,
-            onUsernameChange = { username = it }
+            errorMessage = signInViewModel.formState.usernameError,
+            username = signInViewModel.formState.username,
+            shouldErrorBeDisplayed = signInViewModel.shouldShowErrors,
+            onUsernameChange = { signInViewModel.onEvent(SignInEvent.UsernameHasChanged(it)) }
         )
         PasswordTextField(
             labelId = R.string.password_input_label,
-            errorMessage = UiText.DynamicString(""),
-            password = password,
-            shouldErrorBeDisplayed = false,
-            onPasswordChange = { password = it }
+            errorMessage = signInViewModel.formState.passwordError,
+            password = signInViewModel.formState.password,
+            shouldErrorBeDisplayed = signInViewModel.shouldShowErrors,
+            onPasswordChange = {
+                signInViewModel.onEvent(SignInEvent.PasswordHasChanged(it))
+            }
         )
-        Button(onClick = { /*TODO*/ }) {
-            Text(stringResource(R.string.sign_in_screen))
-        }
+        TwoNavigationButtonInRow(
+            firstButtonLabel = R.string.cancel_button_label,
+            secondButtonLabel = R.string.sign_in_button_label,
+            onFirstButtonClicked = { onCancelButtonClickedNavigateTo() },
+            onSecondButtonClicked = {
+                signInViewModel.onEvent(
+                    SignInEvent.SignInButtonHasBeenClicked(onSignInButtonClickedNavigateTo)
+                )
+            }
+        )
     }
 }
 
 @Preview
 @Composable
 fun SignInScreenPreview() {
-    SignInScreen()
+    SignInScreen(
+        signInViewModel = SignInViewModel(),
+        onCancelButtonClickedNavigateTo = {},
+        onSignInButtonClickedNavigateTo = {}
+    )
 }

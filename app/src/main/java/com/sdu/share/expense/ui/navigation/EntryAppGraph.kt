@@ -3,6 +3,7 @@ package com.sdu.share.expense.ui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.sdu.share.expense.ui.models.signin.SignInViewModel
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.screens.AccountDetailsScreen
 import com.sdu.share.expense.ui.screens.PersonalDetailsScreen
@@ -14,6 +15,7 @@ import com.sdu.share.expense.ui.screens.WelcomeScreen
 fun NavGraphBuilder.entryAppGraph(
     navController: NavHostController,
     signUpViewModel: SignUpViewModel,
+    signInViewModel: SignInViewModel
 ) {
     composable(route = ShareExpenseScreen.WELCOME_SCREEN.name) {
         WelcomeScreen(
@@ -27,7 +29,13 @@ fun NavGraphBuilder.entryAppGraph(
     }
     composable(route = ShareExpenseScreen.SIGN_IN_SCREEN.name) {
         SignInScreen(
-
+            signInViewModel = signInViewModel,
+            onCancelButtonClickedNavigateTo = {
+                navigateToWelcomeScreen(navController)
+            },
+            onSignInButtonClickedNavigateTo = {
+                navController.navigate(ShareExpenseScreen.HOME_SCREEN.name)
+            }
         )
     }
     composable(route = ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) {
@@ -60,7 +68,6 @@ fun NavGraphBuilder.entryAppGraph(
                 navigateToWelcomeScreen(navController)
             }
         )
-
     }
 }
 
