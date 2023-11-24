@@ -4,13 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.sdu.share.expense.data.user.UserRepository
 import com.sdu.share.expense.validation.cases.EmailValidator
 import com.sdu.share.expense.validation.cases.NameValidator
 import com.sdu.share.expense.validation.cases.PasswordValidator
 import com.sdu.share.expense.validation.cases.RetypedPasswordValidator
 import com.sdu.share.expense.validation.cases.UsernameValidator
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     var formState by mutableStateOf(SignUpViewModelState())
     var shouldShowPersonalDetailsErrors by mutableStateOf(false)
     var shouldShowAccountDetailsErrors by mutableStateOf(false)
@@ -68,10 +69,6 @@ class SignUpViewModel : ViewModel() {
                     event.navigateTo()
                 }
             }
-
-            is SignUpEvent.Submit -> {
-                /* TODO */
-            }
         }
     }
 
@@ -124,6 +121,10 @@ class SignUpViewModel : ViewModel() {
         formState = formState.copy(retypedPasswordError = res.errorMessage)
         return res.successful
     }
+
+    suspend fun saveUser() {
+        userRepository.insertUser(formState.toUser())
+    }
 }
 
 sealed class SignUpEvent {
@@ -136,5 +137,4 @@ sealed class SignUpEvent {
     data class RetypedPasswordHasChanged(val retypedPassword: String) : SignUpEvent()
     data class NotificationOptionHasChanged(val shouldSendNotifications: Boolean) : SignUpEvent()
     data class AccountDataScreenNextButtonClicked(val navigateTo: () -> Unit) : SignUpEvent()
-    data class Submit(val navigateTo: () -> Unit) : SignUpEvent()
 }

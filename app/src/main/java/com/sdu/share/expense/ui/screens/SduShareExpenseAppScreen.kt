@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.sdu.share.expense.AppViewModelProvider
 import com.sdu.share.expense.ui.models.signin.SignInViewModel
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.navigation.ShareExpenseScreen
@@ -28,7 +29,7 @@ fun ShareExpenseApp(
     val currentScreen = ShareExpenseScreen.valueOf(
         backStackEntry?.destination?.route ?: ShareExpenseScreen.WELCOME_SCREEN.name
     )
-    val signUpViewModel = viewModel<SignUpViewModel>()
+    val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val signInViewModel = viewModel<SignInViewModel>()
 
     Scaffold(

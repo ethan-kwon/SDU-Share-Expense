@@ -7,11 +7,14 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sdu.share.expense.AppViewModelProvider
 import com.sdu.share.expense.R
 import com.sdu.share.expense.ui.components.GenericTextField
 import com.sdu.share.expense.ui.components.PasswordTextField
@@ -19,6 +22,7 @@ import com.sdu.share.expense.ui.components.TwoNavigationButtonInRow
 import com.sdu.share.expense.ui.components.UsernameTextField
 import com.sdu.share.expense.ui.models.signup.SignUpEvent
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun PersonalDetailsScreen(
@@ -72,7 +76,7 @@ fun PersonalDetailsScreen(
 @Composable
 fun PersonalDetailsScreenPreview() {
     PersonalDetailsScreen(
-        signUpViewModel = SignUpViewModel(),
+        signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
         onCancelButtonClickedNavigateTo = {},
         onNextButtonClickedNavigateTo = {}
     )
@@ -132,7 +136,7 @@ fun AccountDetailsScreen(
 @Composable
 fun AccountDetailsScreenPreview() {
     AccountDetailsScreen(
-        signUpViewModel = SignUpViewModel(),
+        signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
         onCancelButtonClickedNavigateTo = {},
         onNextButtonClickedNavigateTo = {}
     )
@@ -141,10 +145,11 @@ fun AccountDetailsScreenPreview() {
 @Composable
 fun SignUpSummaryScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClicked: () -> Unit,
-    onCreateAccountButtonClicked: () -> Unit,
+    onCancelButtonClickedNavigateTo: () -> Unit,
+    onSaveAccountButtonClickedNavigateTo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val items = listOf(
         Pair(
             stringResource(R.string.first_name_sign_up_summary_label),
@@ -178,9 +183,12 @@ fun SignUpSummaryScreen(
         TwoNavigationButtonInRow(
             firstButtonLabel = R.string.cancel_button_label,
             secondButtonLabel = R.string.create_account_button_label,
-            onFirstButtonClicked = onCancelButtonClicked,
+            onFirstButtonClicked = onCancelButtonClickedNavigateTo,
             onSecondButtonClicked = {
-                signUpViewModel.onEvent(SignUpEvent.Submit(onCreateAccountButtonClicked))
+                coroutineScope.launch {
+                    signUpViewModel.saveUser()
+                    onSaveAccountButtonClickedNavigateTo()
+                }
             })
     }
 }
@@ -189,7 +197,7 @@ fun SignUpSummaryScreen(
 @Composable
 fun SignUpSummaryScreenPreview() {
     SignUpSummaryScreen(
-        signUpViewModel = SignUpViewModel(),
-        onCancelButtonClicked = { },
-        onCreateAccountButtonClicked = { })
+        signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
+        onCancelButtonClickedNavigateTo = { },
+        onSaveAccountButtonClickedNavigateTo = { })
 }

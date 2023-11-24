@@ -1,5 +1,6 @@
 package com.sdu.share.expense.ui.models.signup
 
+import com.sdu.share.expense.models.User
 import com.sdu.share.expense.ui.components.UiText
 
 data class SignUpViewModelState(
@@ -22,4 +23,14 @@ data class SignUpViewModelState(
     val retypedPasswordError: UiText? = null,
 
     val shouldSendNotification: Boolean = false
+)
+
+fun SignUpViewModelState.toUser(): User = User(
+    id = 0,
+    firstName = firstName,
+    lastName = lastName,
+    email = email,
+    username = username,
+    password = password,
+    shouldSendNotification = shouldSendNotification
 )
