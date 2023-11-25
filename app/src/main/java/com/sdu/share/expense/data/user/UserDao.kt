@@ -13,4 +13,7 @@ interface UserDao {
 
     @Query("SELECT * FROM users WHERE username = :username")
     fun getUserByUsername(username: String): Flow<User?>
+
+    @Query("SELECT EXISTS(SELECT * FROM users WHERE username = :username)")
+    fun existsByUsername(username: String): Boolean
 }

@@ -22,6 +22,7 @@ import com.sdu.share.expense.ui.components.TwoNavigationButtonInRow
 import com.sdu.share.expense.ui.components.UsernameTextField
 import com.sdu.share.expense.ui.models.signup.SignUpEvent
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -89,6 +90,8 @@ fun AccountDetailsScreen(
     onNextButtonClickedNavigateTo: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Column(modifier = modifier) {
         UsernameTextField(
             errorMessage = signUpViewModel.formState.usernameError,
@@ -124,9 +127,11 @@ fun AccountDetailsScreen(
             secondButtonLabel = R.string.next_button_label,
             onFirstButtonClicked = onCancelButtonClickedNavigateTo,
             onSecondButtonClicked = {
-                signUpViewModel.onEvent(
-                    SignUpEvent.AccountDataScreenNextButtonClicked(onNextButtonClickedNavigateTo)
-                )
+                coroutineScope.launch(Dispatchers.IO) {
+                    signUpViewModel.onEvent(
+                        SignUpEvent.AccountDataScreenNextButtonClicked(onNextButtonClickedNavigateTo)
+                    )
+                }
             }
         )
     }

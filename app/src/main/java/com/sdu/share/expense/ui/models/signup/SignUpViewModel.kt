@@ -18,7 +18,7 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
 
     private val nameValidator = NameValidator()
     private val emailValidator = EmailValidator()
-    private val usernameValidator = UsernameValidator()
+    private val usernameValidator = UsernameValidator(userRepository)
     private val passwordValidator = PasswordValidator()
     private val retypedPasswordValidator = RetypedPasswordValidator()
 

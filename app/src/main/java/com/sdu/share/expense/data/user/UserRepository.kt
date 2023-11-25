@@ -7,4 +7,6 @@ interface UserRepository {
     suspend fun insertUser(user: User)
 
     fun getUserByUsername(username: String): Flow<User?>
+
+    fun existsByUsername(username: String): Boolean
 }

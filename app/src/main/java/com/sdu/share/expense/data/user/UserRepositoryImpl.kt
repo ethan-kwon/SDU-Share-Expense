@@ -11,4 +11,8 @@ class UserRepositoryImpl(private val userDao: UserDao) : UserRepository {
     override fun getUserByUsername(username: String): Flow<User?> {
         return userDao.getUserByUsername(username)
     }
+
+    override fun existsByUsername(username: String): Boolean {
+        return userDao.existsByUsername(username)
+    }
 }
