@@ -7,5 +7,7 @@ data class SignInViewModelState(
     val usernameError: UiText? = null,
 
     val password: String = "",
-    val passwordError: UiText? = null
+    val passwordError: UiText? = null,
+
+    val invalidCredentialsError: UiText? = null
 )

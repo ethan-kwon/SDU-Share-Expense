@@ -12,5 +12,5 @@ data class User(
     val email: String,
     val username: String,
     val password: String,
-    val shouldSendNotification: Boolean = false
+    val shouldSendNotification: Boolean
 )
