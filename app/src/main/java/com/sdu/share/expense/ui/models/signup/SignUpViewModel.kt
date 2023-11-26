@@ -13,8 +13,11 @@ import com.sdu.share.expense.validation.cases.UsernameValidator
 
 class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     var formState by mutableStateOf(SignUpViewModelState())
+        private set
     var shouldShowPersonalDetailsErrors by mutableStateOf(false)
+        private set
     var shouldShowAccountDetailsErrors by mutableStateOf(false)
+        private set
 
     private val nameValidator = NameValidator()
     private val emailValidator = EmailValidator()

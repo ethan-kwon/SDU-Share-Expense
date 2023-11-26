@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.sdu.share.expense.models.User
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -12,7 +11,7 @@ interface UserDao {
     suspend fun insert(user: User)
 
     @Query("SELECT * FROM users WHERE username = :username")
-    fun getUserByUsername(username: String): Flow<User?>
+    fun getUserByUsername(username: String): User?
 
     @Query("SELECT EXISTS(SELECT * FROM users WHERE username = :username)")
     fun existsByUsername(username: String): Boolean

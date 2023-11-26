@@ -47,6 +47,6 @@
     <string name="username_is_already_taken_error">Username is already taken, try different one</string>
     <string name="password_needs_one_letter_and_digit_error">The password needs to contain at least one upper-case letter and digit</string>
     <string name="passwords_do_not_match_error">Password confirmation does not match</string>
-
+    <string name="invalid_credentials_error">Invalid username or password</string>
 
 </resources>
