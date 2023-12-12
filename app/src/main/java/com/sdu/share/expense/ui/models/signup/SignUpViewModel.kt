@@ -3,6 +3,7 @@ package com.sdu.share.expense.ui.models.signup
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
 import com.sdu.share.expense.data.user.UserRepository
 import com.sdu.share.expense.validation.cases.EmailValidator
@@ -10,6 +11,10 @@ import com.sdu.share.expense.validation.cases.NameValidator
 import com.sdu.share.expense.validation.cases.PasswordValidator
 import com.sdu.share.expense.validation.cases.RetypedPasswordValidator
 import com.sdu.share.expense.validation.cases.UsernameValidator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
     var formState by mutableStateOf(SignUpViewModelState())
@@ -65,10 +70,14 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
             }
 
             is SignUpEvent.AccountDataScreenNextButtonClicked -> {
-                shouldShowAccountDetailsErrors = true
+                event.coroutineScope.launch(Dispatchers.Main) {
+                    withContext(Dispatchers.IO) {
+                        shouldShowAccountDetailsErrors = true
+                        if (validateAccountDetails()) {
+                            shouldShowAccountDetailsErrors = false
+                        }
+                    }
 
-                if (validateAccountDetails()) {
-                    shouldShowAccountDetailsErrors = false
                     event.navigateTo()
                 }
             }
@@ -139,5 +148,7 @@ sealed class SignUpEvent {
     data class PasswordHasChanged(val password: String) : SignUpEvent()
     data class RetypedPasswordHasChanged(val retypedPassword: String) : SignUpEvent()
     data class NotificationOptionHasChanged(val shouldSendNotifications: Boolean) : SignUpEvent()
-    data class AccountDataScreenNextButtonClicked(val navigateTo: () -> Unit) : SignUpEvent()
+    data class AccountDataScreenNextButtonClicked(
+        val coroutineScope: CoroutineScope,
+        val navigateTo: () -> Unit) : SignUpEvent()
 }

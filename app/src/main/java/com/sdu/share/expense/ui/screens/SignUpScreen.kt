@@ -127,11 +127,9 @@ fun AccountDetailsScreen(
             secondButtonLabel = R.string.next_button_label,
             onFirstButtonClicked = onCancelButtonClickedNavigateTo,
             onSecondButtonClicked = {
-                coroutineScope.launch(Dispatchers.IO) {
-                    signUpViewModel.onEvent(
-                        SignUpEvent.AccountDataScreenNextButtonClicked(onNextButtonClickedNavigateTo)
-                    )
-                }
+                signUpViewModel.onEvent(
+                    SignUpEvent.AccountDataScreenNextButtonClicked(
+                        coroutineScope, onNextButtonClickedNavigateTo))
             }
         )
     }
