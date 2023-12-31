@@ -15,6 +15,10 @@
     <string name="home_navigation_bar_item_text">Home</string>
     <string name="profile_navigation_bar_item_text">Profile</string>
 
+    <!-- Welcome Screen -->
+    <string name="welcome_to_app_header">Welcome to ShareEx</string>
+    <string name="welcome_to_app_sub_header">Share your expenses among people</string>
+
     <!-- Input labels -->
     <string name="username_input_label">Username</string>
     <string name="password_input_label">Password</string>
