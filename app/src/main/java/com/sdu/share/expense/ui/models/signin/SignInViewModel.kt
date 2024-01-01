@@ -37,6 +37,11 @@ class SignInViewModel(
                 formState = formState.copy(password = event.password)
             }
 
+            is SignInEvent.CancelButtonHasBeenClicked -> {
+                event.navigateTo()
+                resetForm()
+            }
+
             is SignInEvent.SignInButtonHasBeenClicked -> {
                 event.coroutineScope.launch(Dispatchers.Main) {
                     withContext(Dispatchers.IO) {
@@ -53,6 +58,11 @@ class SignInViewModel(
                 }
             }
         }
+    }
+
+    private fun resetForm() {
+        formState = SignInViewModelState()
+        shouldShowErrors = false
     }
 
     private fun validateForm(): Boolean {
@@ -87,6 +97,7 @@ class SignInViewModel(
 sealed class SignInEvent {
     data class UsernameHasChanged(val username: String) : SignInEvent()
     data class PasswordHasChanged(val password: String) : SignInEvent()
+    data class CancelButtonHasBeenClicked(val navigateTo: () -> Unit) : SignInEvent()
     data class SignInButtonHasBeenClicked(
         val coroutineScope: CoroutineScope,
         val userViewModel: UserViewModel,

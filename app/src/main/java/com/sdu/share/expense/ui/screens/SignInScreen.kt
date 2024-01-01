@@ -32,11 +32,11 @@ fun SignInScreen(
     val coroutineScope = rememberCoroutineScope()
     val headerText = UiText.StringResource(R.string.sign_in_screen_header)
     val subheaderText = UiText.StringResource(R.string.sign_in_screen_sub_header)
-    val buttonsParams = TwoNavigationButtonsParams(
-        R.string.cancel_button_label,
-        R.string.sign_in_button_label,
-        onCancelButtonClicked
-    ) {
+
+    val onCancelButtonResponse = {
+        signInViewModel.onEvent(SignInEvent.CancelButtonHasBeenClicked(onCancelButtonClicked))
+    }
+    val onSignInButtonResponse = {
         signInViewModel.onEvent(
             SignInEvent.SignInButtonHasBeenClicked(
                 coroutineScope,
@@ -45,6 +45,12 @@ fun SignInScreen(
             )
         )
     }
+    val buttonsParams = TwoNavigationButtonsParams(
+        R.string.cancel_button_label,
+        R.string.sign_in_button_label,
+        onCancelButtonResponse,
+        onSignInButtonResponse
+    )
 
     MoneyBackgroundPreContentFrame(
         headerTitle = headerText,
