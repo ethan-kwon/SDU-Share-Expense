@@ -44,6 +44,7 @@
     <string name="sign_up_button_label">Sign up</string>
     <string name="cancel_button_label">Cancel</string>
     <string name="next_button_label">Next</string>
+    <string name="back_button_label">Back</string>
     <string name="create_account_button_label">Create account</string>
 
     <!-- Sign up summary screen -->

@@ -72,9 +72,7 @@ fun ShareExpenseApp(
 }
 
 private fun shouldTopBarBeDisplayed(currentScreen: ShareExpenseScreen): Boolean {
-    return currentScreen == ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN ||
-            currentScreen == ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN ||
-            currentScreen == ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN
+    return false
 }
 
 private fun shouldBottomBarBeDisplayed(currentScreen: ShareExpenseScreen): Boolean {

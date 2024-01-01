@@ -43,7 +43,12 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                 formState = formState.copy(email = event.email)
             }
 
-            is SignUpEvent.PersonalDataScreenNextButtonClicked -> {
+            is SignUpEvent.PersonalDetailsScreenCancelButtonClicked -> {
+                event.navigateTo()
+                resetForm()
+            }
+
+            is SignUpEvent.PersonalDetailsScreenNextButtonClicked -> {
                 shouldShowPersonalDetailsErrors = true
 
                 if (arePersonalDetailsValid()) {
@@ -70,17 +75,27 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
 
             is SignUpEvent.AccountDataScreenNextButtonClicked -> {
                 event.coroutineScope.launch(Dispatchers.Main) {
+                    var isFormValid: Boolean
+
                     withContext(Dispatchers.IO) {
-                        shouldShowAccountDetailsErrors = true
-                        if (validateAccountDetails()) {
-                            shouldShowAccountDetailsErrors = false
-                        }
+                        isFormValid = validateAccountDetails()
                     }
 
-                    event.navigateTo()
+                    if (isFormValid) {
+                        shouldShowAccountDetailsErrors = false
+                        event.navigateTo()
+                    } else {
+                        shouldShowAccountDetailsErrors = true
+                    }
                 }
             }
         }
+    }
+
+    private fun resetForm() {
+        formState = SignUpViewModelState()
+        shouldShowPersonalDetailsErrors = false
+        shouldShowAccountDetailsErrors = false
     }
 
     private fun arePersonalDetailsValid(): Boolean {
@@ -142,7 +157,8 @@ sealed class SignUpEvent {
     data class FirstNameHasChanged(val firstName: String) : SignUpEvent()
     data class LastNameHasChanged(val lastName: String) : SignUpEvent()
     data class EmailHasChanged(val email: String) : SignUpEvent()
-    data class PersonalDataScreenNextButtonClicked(val navigateTo: () -> Unit) : SignUpEvent()
+    data class PersonalDetailsScreenCancelButtonClicked(val navigateTo: () -> Unit) : SignUpEvent()
+    data class PersonalDetailsScreenNextButtonClicked(val navigateTo: () -> Unit) : SignUpEvent()
     data class UsernameHasChanged(val username: String) : SignUpEvent()
     data class PasswordHasChanged(val password: String) : SignUpEvent()
     data class RetypedPasswordHasChanged(val retypedPassword: String) : SignUpEvent()

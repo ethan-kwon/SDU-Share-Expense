@@ -38,15 +38,23 @@ fun PersonalDetailsScreen(
 ) {
     val headerText = UiText.StringResource(R.string.sign_up_screens_header)
     val subheaderText = UiText.StringResource(R.string.sign_up_personal_details_screen_sub_header)
+
+    val onCancelButtonClickedResponse = {
+        signUpViewModel.onEvent(
+            SignUpEvent.PersonalDetailsScreenCancelButtonClicked(onCancelButtonClicked)
+        )
+    }
+    val onNextButtonClickedResponse = {
+        signUpViewModel.onEvent(
+            SignUpEvent.PersonalDetailsScreenNextButtonClicked(onNextButtonClicked)
+        )
+    }
     val buttonsParams = TwoNavigationButtonsParams(
         R.string.cancel_button_label,
         R.string.next_button_label,
-        onCancelButtonClicked,
-    ) {
-        signUpViewModel.onEvent(
-            SignUpEvent.PersonalDataScreenNextButtonClicked(onNextButtonClicked)
-        )
-    }
+        onCancelButtonClickedResponse,
+        onNextButtonClickedResponse
+    )
 
     MoneyBackgroundPreContentFrame(
         headerTitle = headerText,
@@ -100,7 +108,7 @@ fun PersonalDetailsScreenPreview() {
 @Composable
 fun AccountDetailsScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClicked: () -> Unit,
+    onBackButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -108,9 +116,9 @@ fun AccountDetailsScreen(
     val headerText = UiText.StringResource(R.string.sign_up_screens_header)
     val subheaderText = UiText.StringResource(R.string.sing_up_account_details_screen_sub_header)
     val buttonsParams = TwoNavigationButtonsParams(
-        R.string.cancel_button_label,
+        R.string.back_button_label,
         R.string.next_button_label,
-        onCancelButtonClicked,
+        onBackButtonClicked,
     ) {
         signUpViewModel.onEvent(
             SignUpEvent.AccountDataScreenNextButtonClicked(
@@ -165,7 +173,7 @@ fun AccountDetailsScreen(
 fun AccountDetailsScreenPreview() {
     AccountDetailsScreen(
         signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
-        onCancelButtonClicked = {},
+        onBackButtonClicked = {},
         onNextButtonClicked = {}
     )
 }
@@ -174,16 +182,16 @@ fun AccountDetailsScreenPreview() {
 @Composable
 fun SignUpSummaryScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClicked: () -> Unit,
+    onBackButtonClicked: () -> Unit,
     onSaveAccountButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
     val headerText = UiText.StringResource(R.string.sign_up_summary_screen_header)
     val buttonsParams = TwoNavigationButtonsParams(
-        R.string.cancel_button_label,
+        R.string.back_button_label,
         R.string.create_account_button_label,
-        onCancelButtonClicked,
+        onBackButtonClicked,
     ) {
         signUpViewModel.onEvent(
             SignUpEvent.AccountDataScreenNextButtonClicked(
@@ -253,6 +261,6 @@ fun concatenateStrings(@StringRes stringId: Int, value: String): String {
 fun SignUpSummaryScreenPreview() {
     SignUpSummaryScreen(
         signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
-        onCancelButtonClicked = { },
+        onBackButtonClicked = { },
         onSaveAccountButtonClicked = { })
 }

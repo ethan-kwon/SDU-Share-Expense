@@ -34,7 +34,7 @@ fun NavGraphBuilder.entryAppGraph(
             signInViewModel = signInViewModel,
             userViewModel = userViewModel,
             onCancelButtonClicked = {
-                navigateToWelcomeScreen(navController)
+                navController.popBackStack()
             },
             onSignInButtonClicked = {
                 navController.navigate(ShareExpenseScreen.HOME_SCREEN.name)
@@ -45,7 +45,7 @@ fun NavGraphBuilder.entryAppGraph(
         PersonalDetailsScreen(
             signUpViewModel = signUpViewModel,
             onCancelButtonClicked = {
-                navigateToWelcomeScreen(navController)
+                navController.popBackStack()
             },
             onNextButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name)
@@ -54,8 +54,8 @@ fun NavGraphBuilder.entryAppGraph(
     composable(route = ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name) {
         AccountDetailsScreen(
             signUpViewModel = signUpViewModel,
-            onCancelButtonClicked = {
-                navigateToWelcomeScreen(navController)
+            onBackButtonClicked = {
+                navController.popBackStack()
             },
             onNextButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name)
@@ -64,16 +64,12 @@ fun NavGraphBuilder.entryAppGraph(
     composable(route = ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name) {
         SignUpSummaryScreen(
             signUpViewModel = signUpViewModel,
+            onBackButtonClicked = {
+                navController.popBackStack()
+            },
             onSaveAccountButtonClicked = {
                 navController.navigate(ShareExpenseScreen.HOME_SCREEN.name)
-            },
-            onCancelButtonClicked = {
-                navigateToWelcomeScreen(navController)
             }
         )
     }
-}
-
-private fun navigateToWelcomeScreen(navController: NavHostController) {
-    navController.popBackStack(ShareExpenseScreen.WELCOME_SCREEN.name, inclusive = false)
 }
