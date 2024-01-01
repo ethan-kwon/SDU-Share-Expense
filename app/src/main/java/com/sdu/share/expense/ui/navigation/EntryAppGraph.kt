@@ -21,10 +21,10 @@ fun NavGraphBuilder.entryAppGraph(
 ) {
     composable(route = ShareExpenseScreen.WELCOME_SCREEN.name) {
         WelcomeScreen(
-            onSignInButtonClick = {
+            onSignInButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_IN_SCREEN.name)
             },
-            onSignUpButtonClick = {
+            onSignUpButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name)
             }
         )
@@ -33,10 +33,10 @@ fun NavGraphBuilder.entryAppGraph(
         SignInScreen(
             signInViewModel = signInViewModel,
             userViewModel = userViewModel,
-            onCancelButtonClickedNavigateTo = {
+            onCancelButtonClicked = {
                 navigateToWelcomeScreen(navController)
             },
-            onSignInButtonClickedNavigateTo = {
+            onSignInButtonClicked = {
                 navController.navigate(ShareExpenseScreen.HOME_SCREEN.name)
             }
         )
@@ -44,30 +44,30 @@ fun NavGraphBuilder.entryAppGraph(
     composable(route = ShareExpenseScreen.SIGN_UP_PERSONAL_DETAILS_SCREEN.name) {
         PersonalDetailsScreen(
             signUpViewModel = signUpViewModel,
-            onCancelButtonClickedNavigateTo = {
+            onCancelButtonClicked = {
                 navigateToWelcomeScreen(navController)
             },
-            onNextButtonClickedNavigateTo = {
+            onNextButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name)
             })
     }
     composable(route = ShareExpenseScreen.SIGN_UP_ACCOUNT_DETAILS_SCREEN.name) {
         AccountDetailsScreen(
             signUpViewModel = signUpViewModel,
-            onCancelButtonClickedNavigateTo = {
+            onCancelButtonClicked = {
                 navigateToWelcomeScreen(navController)
             },
-            onNextButtonClickedNavigateTo = {
+            onNextButtonClicked = {
                 navController.navigate(ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name)
             })
     }
     composable(route = ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name) {
         SignUpSummaryScreen(
             signUpViewModel = signUpViewModel,
-            onSaveAccountButtonClickedNavigateTo = {
+            onSaveAccountButtonClicked = {
                 navController.navigate(ShareExpenseScreen.HOME_SCREEN.name)
             },
-            onCancelButtonClickedNavigateTo = {
+            onCancelButtonClicked = {
                 navigateToWelcomeScreen(navController)
             }
         )

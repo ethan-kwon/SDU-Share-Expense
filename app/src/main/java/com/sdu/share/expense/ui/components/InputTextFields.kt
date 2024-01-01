@@ -2,23 +2,31 @@ package com.sdu.share.expense.ui.components
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import com.sdu.share.expense.R
 
 @Composable
@@ -34,6 +42,7 @@ fun EditTextField(
     modifier: Modifier = Modifier
 ) {
     val imeAction = if (isFinalField) ImeAction.Done else ImeAction.Next
+    val color = colorResource(R.color.light_brown)
 
     TextField(
         leadingIcon = {
@@ -56,6 +65,14 @@ fun EditTextField(
         value = value,
         isError = shouldErrorBeDisplayed && errorMessage != null,
         onValueChange = onValueChange,
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+            cursorColor = color,
+            focusedIndicatorColor = color,
+            focusedLabelColor = color,
+            focusedLeadingIconColor = color
+
+        ),
         modifier = modifier
     )
 }
@@ -81,6 +98,20 @@ fun GenericTextField(
         onValueChange = onValueChange,
         isFinalField = isFinalField,
         modifier = modifier
+    )
+}
+
+@Composable
+@Preview
+fun GenericTextFieldPreview() {
+    GenericTextField(
+        labelId = R.string.email_input_label,
+        leadingIconId = R.drawable.mail_24px,
+        errorMessage = null,
+        value = "",
+        shouldErrorBeDisplayed = false,
+        onValueChange = {},
+        isFinalField = false
     )
 }
 
@@ -130,6 +161,8 @@ fun EditPasswordTextField(
         if (!isPasswordVisible) PasswordVisualTransformation()
         else VisualTransformation.None
 
+    val color = colorResource(R.color.light_brown)
+
     TextField(
         leadingIcon = {
             Icon(
@@ -162,6 +195,14 @@ fun EditPasswordTextField(
         isError = shouldErrorBeDisplayed && errorMessage != null,
         onValueChange = onValueChange,
         visualTransformation = visualTransformation,
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = Color.Transparent,
+            cursorColor = color,
+            focusedIndicatorColor = color,
+            focusedLabelColor = color,
+            focusedLeadingIconColor = color,
+            focusedTrailingIconColor = color
+        ),
         modifier = modifier
     )
 }
@@ -186,4 +227,30 @@ fun PasswordTextField(
         isFinalField = isFinalField,
         modifier = modifier
     )
+}
+
+@Composable
+fun TextCheckbox(
+    messageText: UiText?,
+    isChecked: Boolean,
+    onValueChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val checkboxColor = colorResource(R.color.light_brown)
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        if (messageText != null) {
+            Text(messageText.asString())
+        }
+        Checkbox(
+            colors = CheckboxDefaults.colors(
+                checkedColor = checkboxColor
+            ),
+            checked = isChecked,
+            onCheckedChange = onValueChange
+        )
+    }
 }

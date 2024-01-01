@@ -1,16 +1,21 @@
 package com.sdu.share.expense.ui.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sdu.share.expense.AppViewModelProvider
 import com.sdu.share.expense.R
+import com.sdu.share.expense.ui.components.ErrorMessage
+import com.sdu.share.expense.ui.components.MoneyBackgroundPreContentFrame
 import com.sdu.share.expense.ui.components.PasswordTextField
-import com.sdu.share.expense.ui.components.TwoNavigationButtonInRow
+import com.sdu.share.expense.ui.components.TwoNavigationButtonsParams
+import com.sdu.share.expense.ui.components.UiText
 import com.sdu.share.expense.ui.components.UsernameTextField
 import com.sdu.share.expense.ui.models.signin.SignInEvent
 import com.sdu.share.expense.ui.models.signin.SignInViewModel
@@ -20,18 +25,39 @@ import com.sdu.share.expense.ui.models.user.UserViewModel
 fun SignInScreen(
     signInViewModel: SignInViewModel,
     userViewModel: UserViewModel,
-    onCancelButtonClickedNavigateTo: () -> Unit,
-    onSignInButtonClickedNavigateTo: () -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    onSignInButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val headerText = UiText.StringResource(R.string.sign_in_screen_header)
+    val subheaderText = UiText.StringResource(R.string.sign_in_screen_sub_header)
+    val buttonsParams = TwoNavigationButtonsParams(
+        R.string.cancel_button_label,
+        R.string.sign_in_button_label,
+        onCancelButtonClicked
+    ) {
+        signInViewModel.onEvent(
+            SignInEvent.SignInButtonHasBeenClicked(
+                coroutineScope,
+                userViewModel,
+                onSignInButtonClicked
+            )
+        )
+    }
 
-    Column(modifier = modifier) {
+    MoneyBackgroundPreContentFrame(
+        headerTitle = headerText,
+        subheaderTitle = subheaderText,
+        buttonsParams = buttonsParams,
+        modifier = modifier
+    ) {
         UsernameTextField(
             errorMessage = signInViewModel.formState.usernameError,
             username = signInViewModel.formState.username,
             shouldErrorBeDisplayed = signInViewModel.shouldShowErrors,
-            onUsernameChange = { signInViewModel.onEvent(SignInEvent.UsernameHasChanged(it)) }
+            onUsernameChange = { signInViewModel.onEvent(SignInEvent.UsernameHasChanged(it)) },
+            modifier = Modifier.padding(top = 4.dp)
         )
         PasswordTextField(
             labelId = R.string.password_input_label,
@@ -40,29 +66,19 @@ fun SignInScreen(
             shouldErrorBeDisplayed = signInViewModel.shouldShowErrors,
             onPasswordChange = {
                 signInViewModel.onEvent(SignInEvent.PasswordHasChanged(it))
-            }
+            },
+            modifier = Modifier.padding(top = 4.dp)
         )
 
         if (signInViewModel.shouldShowErrors
             && signInViewModel.formState.invalidCredentialsError != null
         ) {
-            Text(signInViewModel.formState.invalidCredentialsError!!.asString())
+            ErrorMessage(
+                errorMessageContent = signInViewModel.formState.invalidCredentialsError!!,
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
-
-        TwoNavigationButtonInRow(
-            firstButtonLabel = R.string.cancel_button_label,
-            secondButtonLabel = R.string.sign_in_button_label,
-            onFirstButtonClicked = { onCancelButtonClickedNavigateTo() },
-            onSecondButtonClicked = {
-                signInViewModel.onEvent(
-                    SignInEvent.SignInButtonHasBeenClicked(
-                        coroutineScope,
-                        userViewModel,
-                        onSignInButtonClickedNavigateTo
-                    )
-                )
-            }
-        )
+        Spacer(modifier = Modifier.size(8.dp))
     }
 }
 
@@ -72,7 +88,7 @@ fun SignInScreenPreview() {
     SignInScreen(
         signInViewModel = viewModel(factory = AppViewModelProvider.Factory),
         userViewModel = viewModel(factory = AppViewModelProvider.Factory),
-        onCancelButtonClickedNavigateTo = {},
-        onSignInButtonClickedNavigateTo = {}
+        onCancelButtonClicked = {},
+        onSignInButtonClicked = {}
     )
 }

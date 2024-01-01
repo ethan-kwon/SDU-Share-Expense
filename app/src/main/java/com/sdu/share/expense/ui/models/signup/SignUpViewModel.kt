@@ -3,7 +3,6 @@ package com.sdu.share.expense.ui.models.signup
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
 import com.sdu.share.expense.data.user.UserRepository
 import com.sdu.share.expense.validation.cases.EmailValidator
@@ -150,5 +149,6 @@ sealed class SignUpEvent {
     data class NotificationOptionHasChanged(val shouldSendNotifications: Boolean) : SignUpEvent()
     data class AccountDataScreenNextButtonClicked(
         val coroutineScope: CoroutineScope,
-        val navigateTo: () -> Unit) : SignUpEvent()
+        val navigateTo: () -> Unit
+    ) : SignUpEvent()
 }

@@ -1,38 +1,59 @@
 package com.sdu.share.expense.ui.screens
 
+import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sdu.share.expense.AppViewModelProvider
 import com.sdu.share.expense.R
 import com.sdu.share.expense.ui.components.GenericTextField
+import com.sdu.share.expense.ui.components.MoneyBackgroundPreContentFrame
 import com.sdu.share.expense.ui.components.PasswordTextField
-import com.sdu.share.expense.ui.components.TwoNavigationButtonInRow
+import com.sdu.share.expense.ui.components.SignUpSummaryItem
+import com.sdu.share.expense.ui.components.TextCheckbox
+import com.sdu.share.expense.ui.components.TwoNavigationButtonsParams
+import com.sdu.share.expense.ui.components.UiText
 import com.sdu.share.expense.ui.components.UsernameTextField
 import com.sdu.share.expense.ui.models.signup.SignUpEvent
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun PersonalDetailsScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClickedNavigateTo: () -> Unit,
-    onNextButtonClickedNavigateTo: () -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    val headerText = UiText.StringResource(R.string.sign_up_screens_header)
+    val subheaderText = UiText.StringResource(R.string.sign_up_personal_details_screen_sub_header)
+    val buttonsParams = TwoNavigationButtonsParams(
+        R.string.cancel_button_label,
+        R.string.next_button_label,
+        onCancelButtonClicked,
+    ) {
+        signUpViewModel.onEvent(
+            SignUpEvent.PersonalDataScreenNextButtonClicked(onNextButtonClicked)
+        )
+    }
+
+    MoneyBackgroundPreContentFrame(
+        headerTitle = headerText,
+        subheaderTitle = subheaderText,
+        buttonsParams = buttonsParams,
+        modifier = modifier
+    ) {
         GenericTextField(
             labelId = R.string.first_name_input_label,
             leadingIconId = R.drawable.badge_24px,
@@ -40,7 +61,8 @@ fun PersonalDetailsScreen(
             value = signUpViewModel.formState.firstName,
             shouldErrorBeDisplayed = signUpViewModel.shouldShowPersonalDetailsErrors,
             onValueChange = { signUpViewModel.onEvent(SignUpEvent.FirstNameHasChanged(it)) },
-            isFinalField = false
+            isFinalField = false,
+            modifier = Modifier.padding(top = 4.dp)
         )
         GenericTextField(
             labelId = R.string.last_name_input_label,
@@ -49,26 +71,18 @@ fun PersonalDetailsScreen(
             value = signUpViewModel.formState.lastName,
             shouldErrorBeDisplayed = signUpViewModel.shouldShowPersonalDetailsErrors,
             onValueChange = { signUpViewModel.onEvent(SignUpEvent.LastNameHasChanged(it)) },
-            isFinalField = false
+            isFinalField = false,
+            modifier = Modifier.padding(vertical = 4.dp)
         )
         GenericTextField(
             labelId = R.string.email_input_label,
-            leadingIconId = R.drawable.badge_24px,
+            leadingIconId = R.drawable.mail_24px,
             errorMessage = signUpViewModel.formState.emailError,
             value = signUpViewModel.formState.email,
             shouldErrorBeDisplayed = signUpViewModel.shouldShowPersonalDetailsErrors,
             onValueChange = { signUpViewModel.onEvent(SignUpEvent.EmailHasChanged(it)) },
-            isFinalField = false
-        )
-        TwoNavigationButtonInRow(
-            firstButtonLabel = R.string.cancel_button_label,
-            secondButtonLabel = R.string.next_button_label,
-            onFirstButtonClicked = onCancelButtonClickedNavigateTo,
-            onSecondButtonClicked = {
-                signUpViewModel.onEvent(
-                    SignUpEvent.PersonalDataScreenNextButtonClicked(onNextButtonClickedNavigateTo)
-                )
-            }
+            isFinalField = true,
+            modifier = Modifier.padding(bottom = 8.dp)
         )
     }
 }
@@ -78,26 +92,45 @@ fun PersonalDetailsScreen(
 fun PersonalDetailsScreenPreview() {
     PersonalDetailsScreen(
         signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
-        onCancelButtonClickedNavigateTo = {},
-        onNextButtonClickedNavigateTo = {}
+        onCancelButtonClicked = {},
+        onNextButtonClicked = {}
     )
 }
 
 @Composable
 fun AccountDetailsScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClickedNavigateTo: () -> Unit,
-    onNextButtonClickedNavigateTo: () -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val headerText = UiText.StringResource(R.string.sign_up_screens_header)
+    val subheaderText = UiText.StringResource(R.string.sing_up_account_details_screen_sub_header)
+    val buttonsParams = TwoNavigationButtonsParams(
+        R.string.cancel_button_label,
+        R.string.next_button_label,
+        onCancelButtonClicked,
+    ) {
+        signUpViewModel.onEvent(
+            SignUpEvent.AccountDataScreenNextButtonClicked(
+                coroutineScope, onNextButtonClicked
+            )
+        )
+    }
 
-    Column(modifier = modifier) {
+    MoneyBackgroundPreContentFrame(
+        headerTitle = headerText,
+        subheaderTitle = subheaderText,
+        buttonsParams = buttonsParams,
+        modifier = modifier
+    ) {
         UsernameTextField(
             errorMessage = signUpViewModel.formState.usernameError,
             username = signUpViewModel.formState.username,
             shouldErrorBeDisplayed = signUpViewModel.shouldShowAccountDetailsErrors,
-            onUsernameChange = { signUpViewModel.onEvent(SignUpEvent.UsernameHasChanged(it)) }
+            onUsernameChange = { signUpViewModel.onEvent(SignUpEvent.UsernameHasChanged(it)) },
+            modifier = Modifier.padding(top = 4.dp)
         )
         PasswordTextField(
             labelId = R.string.new_password_input_label,
@@ -105,6 +138,8 @@ fun AccountDetailsScreen(
             password = signUpViewModel.formState.password,
             shouldErrorBeDisplayed = signUpViewModel.shouldShowAccountDetailsErrors,
             onPasswordChange = { signUpViewModel.onEvent(SignUpEvent.PasswordHasChanged(it)) },
+            isFinalField = false,
+            modifier = Modifier.padding(vertical = 4.dp)
         )
         PasswordTextField(
             labelId = R.string.retype_password_input_label,
@@ -112,25 +147,15 @@ fun AccountDetailsScreen(
             password = signUpViewModel.formState.retypedPassword,
             shouldErrorBeDisplayed = signUpViewModel.shouldShowAccountDetailsErrors,
             onPasswordChange = { signUpViewModel.onEvent(SignUpEvent.RetypedPasswordHasChanged(it)) },
+            modifier = Modifier.padding(bottom = 4.dp)
         )
-        Row {
-            Text(stringResource(R.string.should_send_notifications_label))
-            Checkbox(
-                checked = signUpViewModel.formState.shouldSendNotification,
-                onCheckedChange = {
-                    signUpViewModel.onEvent(SignUpEvent.NotificationOptionHasChanged(it))
-                }
-            )
-        }
-        TwoNavigationButtonInRow(
-            firstButtonLabel = R.string.cancel_button_label,
-            secondButtonLabel = R.string.next_button_label,
-            onFirstButtonClicked = onCancelButtonClickedNavigateTo,
-            onSecondButtonClicked = {
-                signUpViewModel.onEvent(
-                    SignUpEvent.AccountDataScreenNextButtonClicked(
-                        coroutineScope, onNextButtonClickedNavigateTo))
-            }
+        TextCheckbox(
+            messageText = UiText.StringResource(R.string.should_send_notifications_label),
+            isChecked = signUpViewModel.formState.shouldSendNotification,
+            onValueChange = {
+                signUpViewModel.onEvent(SignUpEvent.NotificationOptionHasChanged(it))
+            },
+            modifier = Modifier.padding(bottom = 4.dp)
         )
     }
 }
@@ -140,60 +165,87 @@ fun AccountDetailsScreen(
 fun AccountDetailsScreenPreview() {
     AccountDetailsScreen(
         signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
-        onCancelButtonClickedNavigateTo = {},
-        onNextButtonClickedNavigateTo = {}
+        onCancelButtonClicked = {},
+        onNextButtonClicked = {}
     )
 }
+
 
 @Composable
 fun SignUpSummaryScreen(
     signUpViewModel: SignUpViewModel,
-    onCancelButtonClickedNavigateTo: () -> Unit,
-    onSaveAccountButtonClickedNavigateTo: () -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    onSaveAccountButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val headerText = UiText.StringResource(R.string.sign_up_summary_screen_header)
+    val buttonsParams = TwoNavigationButtonsParams(
+        R.string.cancel_button_label,
+        R.string.create_account_button_label,
+        onCancelButtonClicked,
+    ) {
+        signUpViewModel.onEvent(
+            SignUpEvent.AccountDataScreenNextButtonClicked(
+                coroutineScope, onSaveAccountButtonClicked
+            )
+        )
+    }
+    val formState = signUpViewModel.formState
     val items = listOf(
         Pair(
-            stringResource(R.string.first_name_sign_up_summary_label),
-            signUpViewModel.formState.firstName
+            R.drawable.badge_24px,
+            concatenateStrings(R.string.first_name_sign_up_summary_label, formState.firstName)
         ),
         Pair(
-            stringResource(R.string.last_name_sign_up_summary_label),
-            signUpViewModel.formState.lastName
+            R.drawable.badge_24px,
+            concatenateStrings(R.string.last_name_sign_up_summary_label, formState.lastName)
         ),
         Pair(
-            stringResource(R.string.email_sign_up_summary_label),
-            signUpViewModel.formState.email
+            R.drawable.mail_24px,
+            concatenateStrings(R.string.email_sign_up_summary_label, formState.email)
         ),
         Pair(
-            stringResource(R.string.username_sign_up_summary_label),
-            signUpViewModel.formState.username
+            R.drawable.account_circle_24px,
+            concatenateStrings(R.string.username_sign_up_summary_label, formState.username)
         ),
         Pair(
-            stringResource(R.string.should_send_notifications_sign_up_summary_label),
-            if (signUpViewModel.formState.shouldSendNotification) "true" else "false"
+            R.drawable.baseline_notifications_24,
+            concatenateStrings(
+                R.string.should_send_notifications_sign_up_summary_label,
+                if (formState.shouldSendNotification) "Yes" else "No"
+            )
         )
     )
+    val lightGrayColor = colorResource(R.color.light_gray)
 
-    Column(modifier = modifier) {
-        items.forEach { item ->
-            Text(item.first.uppercase())
-            Text(text = item.second, fontWeight = FontWeight.Bold)
-            Divider(thickness = 1.dp)
+    MoneyBackgroundPreContentFrame(
+        headerTitle = headerText,
+        subheaderTitle = null,
+        buttonsParams = buttonsParams,
+        modifier = modifier
+    ) {
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 8.dp)
+        ) {
+            items.forEachIndexed { i, it ->
+                SignUpSummaryItem(
+                    it.first,
+                    it.second,
+                    modifier = Modifier.background(if (i % 2 == 1) lightGrayColor else Color.Transparent)
+                )
+            }
         }
-        Spacer(modifier = Modifier)
-        TwoNavigationButtonInRow(
-            firstButtonLabel = R.string.cancel_button_label,
-            secondButtonLabel = R.string.create_account_button_label,
-            onFirstButtonClicked = onCancelButtonClickedNavigateTo,
-            onSecondButtonClicked = {
-                coroutineScope.launch {
-                    signUpViewModel.saveUser()
-                    onSaveAccountButtonClickedNavigateTo()
-                }
-            })
+        Spacer(modifier = Modifier.size(8.dp))
     }
+}
+
+@Composable
+fun concatenateStrings(@StringRes stringId: Int, value: String): String {
+    return stringResource(stringId) + ": " + value
 }
 
 @Preview(showBackground = true)
@@ -201,6 +253,6 @@ fun SignUpSummaryScreen(
 fun SignUpSummaryScreenPreview() {
     SignUpSummaryScreen(
         signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
-        onCancelButtonClickedNavigateTo = { },
-        onSaveAccountButtonClickedNavigateTo = { })
+        onCancelButtonClicked = { },
+        onSaveAccountButtonClicked = { })
 }

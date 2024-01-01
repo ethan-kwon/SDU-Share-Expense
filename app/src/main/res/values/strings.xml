@@ -19,6 +19,16 @@
     <string name="welcome_to_app_header">Welcome to ShareEx</string>
     <string name="welcome_to_app_sub_header">Share your expenses among people</string>
 
+    <!-- Sign In Screen -->
+    <string name="sign_in_screen_header">Sign in</string>
+    <string name="sign_in_screen_sub_header">Please sign in to continue.</string>
+
+    <!-- Sign Up Screens -->
+    <string name="sign_up_screens_header">Sign up</string>
+    <string name="sign_up_summary_screen_header">Sign up summary</string>
+    <string name="sign_up_personal_details_screen_sub_header">Please enter your personal details</string>
+    <string name="sing_up_account_details_screen_sub_header">Please enter account details</string>
+
     <!-- Input labels -->
     <string name="username_input_label">Username</string>
     <string name="password_input_label">Password</string>
@@ -37,11 +47,11 @@
     <string name="create_account_button_label">Create account</string>
 
     <!-- Sign up summary screen -->
-    <string name="first_name_sign_up_summary_label">First name: </string>
-    <string name="last_name_sign_up_summary_label">Last name: </string>
-    <string name="email_sign_up_summary_label">Email: </string>
-    <string name="username_sign_up_summary_label">Username: </string>
-    <string name="should_send_notifications_sign_up_summary_label">Should send notifications?: </string>
+    <string name="first_name_sign_up_summary_label">First name</string>
+    <string name="last_name_sign_up_summary_label">Last name</string>
+    <string name="email_sign_up_summary_label">Email</string>
+    <string name="username_sign_up_summary_label">Username</string>
+    <string name="should_send_notifications_sign_up_summary_label">Notifications</string>
 
     <!-- Form validation errors -->
     <string name="field_cannot_be_blank_error">The %s cannot be blank</string>

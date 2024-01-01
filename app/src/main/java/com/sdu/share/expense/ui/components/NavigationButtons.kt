@@ -1,6 +1,5 @@
 package com.sdu.share.expense.ui.components
 
-import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -16,36 +15,41 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sdu.share.expense.R
 
+
+data class TwoNavigationButtonsParams(
+    @StringRes val firstButtonLabel: Int = 0,
+    @StringRes val secondButtonLabel: Int = 0,
+    val onFirstButtonClicked: () -> Unit = {},
+    val onSecondButtonClicked: () -> Unit = {}
+)
+
 @Composable
 fun TwoNavigationButtonInRow(
-    @StringRes firstButtonLabel: Int,
-    @StringRes secondButtonLabel: Int,
-    onFirstButtonClicked: () -> Unit,
-    onSecondButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier,
-    @ColorRes outlinedButtonColor: Int = R.color.light_brown,
-    @ColorRes filledButtonBackgroundColor: Int = R.color.light_brown,
+    params: TwoNavigationButtonsParams,
+    modifier: Modifier = Modifier
 ) {
+    val buttonColor = colorResource(R.color.light_brown)
+
     Row(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = modifier
     ) {
         OutlinedButton(
-            onClick = onFirstButtonClicked,
+            onClick = params.onFirstButtonClicked,
             colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = colorResource(outlinedButtonColor)
+                contentColor = buttonColor
             ),
-            border = BorderStroke(1.5.dp, colorResource(outlinedButtonColor))
+            border = BorderStroke(1.5.dp, buttonColor)
         ) {
-            Text(stringResource(firstButtonLabel))
+            Text(stringResource(params.firstButtonLabel))
         }
         Button(
-            onClick = onSecondButtonClicked,
+            onClick = params.onSecondButtonClicked,
             colors = ButtonDefaults.buttonColors(
-                containerColor = colorResource(filledButtonBackgroundColor)
+                containerColor = buttonColor
             )
         ) {
-            Text(stringResource(secondButtonLabel))
+            Text(stringResource(params.secondButtonLabel))
         }
     }
 }
