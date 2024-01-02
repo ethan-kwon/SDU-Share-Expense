@@ -64,4 +64,8 @@
     <string name="passwords_do_not_match_error">Password confirmation does not match</string>
     <string name="invalid_credentials_error">Invalid username or password</string>
 
+    <!-- Encryption data -->
+    <string name="initialization_vector">e1351a2a08d9c3f5</string>
+    <string name="secret_key">F64D2613FFB3FBRE</string>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.sdu.share.expense.data
 
 import android.content.Context
+import com.sdu.share.expense.R
 import com.sdu.share.expense.data.user.UserRepository
 import com.sdu.share.expense.data.user.UserRepositoryImpl
 import com.sdu.share.expense.security.PasswordEncryptor
@@ -15,8 +16,8 @@ class AppDataContainer(private val context: Context) : AppContainer {
         UserRepositoryImpl(ShareExpenseDatabase.getDatabase(context).userDao())
     }
     override val passwordEncryptor: PasswordEncryptor by lazy {
-        val secretKey = "F64D2613FFB3FBRE"
-        val initializationVector = "e1351a2a08d9c3f5"
+        val secretKey = context.resources.getString(R.string.secret_key)
+        val initializationVector = context.resources.getString(R.string.initialization_vector)
 
         PasswordEncryptor(initializationVector, secretKey)
     }
