@@ -15,4 +15,7 @@ interface UserDao {
 
     @Query("SELECT EXISTS(SELECT * FROM users WHERE username = :username)")
     fun existsByUsername(username: String): Boolean
+
+    @Query("DELETE FROM users")
+    fun deleteAll()
 }
