@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.sdu.share.expense.data.user.UserRepository
 import com.sdu.share.expense.models.User
+import com.sdu.share.expense.security.PasswordEncryptor
 import com.sdu.share.expense.ui.models.user.UserViewModel
 import com.sdu.share.expense.ui.models.user.UserViewModelEvent
 import com.sdu.share.expense.validation.cases.BlankInputValidator
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SignInViewModel(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    passwordEncryptor: PasswordEncryptor
 ) : ViewModel() {
     var formState by mutableStateOf(SignInViewModelState())
         private set
@@ -24,7 +26,7 @@ class SignInViewModel(
         private set
 
     private val blankInputValidator = BlankInputValidator()
-    private val credentialsValidator = CredentialsValidator()
+    private val credentialsValidator = CredentialsValidator(passwordEncryptor)
     private var user: User? by mutableStateOf(null)
 
     fun onEvent(event: SignInEvent) {
@@ -43,20 +45,25 @@ class SignInViewModel(
             }
 
             is SignInEvent.SignInButtonHasBeenClicked -> {
-                event.coroutineScope.launch(Dispatchers.Main) {
-                    withContext(Dispatchers.IO) {
-                        retrieveUserByUsername()
-                    }
-
-                    if (validateForm()) {
-                        shouldShowErrors = false
-                        event.userViewModel.onEvent(UserViewModelEvent.UserHasChanged(user!!))
-                        event.navigateTo()
-                    }
-
-                    shouldShowErrors = true
-                }
+                onSignInButtonClicked(event)
             }
+        }
+    }
+
+    private fun onSignInButtonClicked(event: SignInEvent.SignInButtonHasBeenClicked) {
+        event.coroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                retrieveUserByUsername()
+            }
+
+            if (!validateForm()) {
+                shouldShowErrors = true
+                return@launch
+            }
+
+            shouldShowErrors = false
+            event.userViewModel.onEvent(UserViewModelEvent.UserHasChanged(user!!))
+            event.navigateTo()
         }
     }
 

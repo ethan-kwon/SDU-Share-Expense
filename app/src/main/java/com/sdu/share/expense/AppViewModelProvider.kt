@@ -12,7 +12,8 @@ object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
             SignUpViewModel(
-                shareExpenseApplication().container.userRepository
+                shareExpenseApplication().container.userRepository,
+                shareExpenseApplication().container.passwordEncryptor
             )
         }
         initializer {
@@ -20,7 +21,8 @@ object AppViewModelProvider {
         }
         initializer {
             SignInViewModel(
-                shareExpenseApplication().container.userRepository
+                shareExpenseApplication().container.userRepository,
+                shareExpenseApplication().container.passwordEncryptor
             )
         }
     }

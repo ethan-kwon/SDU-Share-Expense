@@ -64,6 +64,7 @@ fun NavGraphBuilder.entryAppGraph(
     composable(route = ShareExpenseScreen.SIGN_UP_SUMMARY_SCREEN.name) {
         SignUpSummaryScreen(
             signUpViewModel = signUpViewModel,
+            userViewModel = userViewModel,
             onBackButtonClicked = {
                 navController.popBackStack()
             },

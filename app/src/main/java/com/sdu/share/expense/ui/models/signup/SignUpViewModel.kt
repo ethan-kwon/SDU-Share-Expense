@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.sdu.share.expense.data.user.UserRepository
+import com.sdu.share.expense.models.User
+import com.sdu.share.expense.security.PasswordEncryptor
+import com.sdu.share.expense.ui.models.user.UserViewModel
+import com.sdu.share.expense.ui.models.user.UserViewModelEvent
 import com.sdu.share.expense.validation.cases.EmailValidator
 import com.sdu.share.expense.validation.cases.NameValidator
 import com.sdu.share.expense.validation.cases.PasswordValidator
@@ -15,7 +19,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() {
+class SignUpViewModel(
+    private val userRepository: UserRepository,
+    private val passwordEncryptor: PasswordEncryptor
+) : ViewModel() {
     var formState by mutableStateOf(SignUpViewModelState())
         private set
     var shouldShowPersonalDetailsErrors by mutableStateOf(false)
@@ -89,6 +96,10 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
                     }
                 }
             }
+
+            is SignUpEvent.CreateAccountButtonClicked -> {
+                onCreateUserEvent(event)
+            }
         }
     }
 
@@ -148,8 +159,26 @@ class SignUpViewModel(private val userRepository: UserRepository) : ViewModel() 
         return res.successful
     }
 
-    suspend fun saveUser() {
-        userRepository.insertUser(formState.toUser())
+    private fun onCreateUserEvent(event: SignUpEvent.CreateAccountButtonClicked) {
+        var user = User.getDefault()
+
+        event.coroutineScope.launch(Dispatchers.IO) {
+            user = saveUser()
+        }
+
+        event.userModel.onEvent(UserViewModelEvent.UserHasChanged(user))
+        event.navigateTo()
+    }
+
+    private suspend fun saveUser(): User {
+        encryptPassword()
+        return userRepository.insertUser(formState.toUser())
+    }
+
+    private fun encryptPassword() {
+        formState = formState.copy(
+            password = passwordEncryptor.encryptPassword(formState.password)
+        )
     }
 }
 
@@ -165,6 +194,12 @@ sealed class SignUpEvent {
     data class NotificationOptionHasChanged(val shouldSendNotifications: Boolean) : SignUpEvent()
     data class AccountDataScreenNextButtonClicked(
         val coroutineScope: CoroutineScope,
+        val navigateTo: () -> Unit
+    ) : SignUpEvent()
+
+    data class CreateAccountButtonClicked(
+        val coroutineScope: CoroutineScope,
+        val userModel: UserViewModel,
         val navigateTo: () -> Unit
     ) : SignUpEvent()
 }

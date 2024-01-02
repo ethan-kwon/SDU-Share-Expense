@@ -28,6 +28,7 @@ import com.sdu.share.expense.ui.components.UiText
 import com.sdu.share.expense.ui.components.UsernameTextField
 import com.sdu.share.expense.ui.models.signup.SignUpEvent
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
+import com.sdu.share.expense.ui.models.user.UserViewModel
 
 @Composable
 fun PersonalDetailsScreen(
@@ -182,6 +183,7 @@ fun AccountDetailsScreenPreview() {
 @Composable
 fun SignUpSummaryScreen(
     signUpViewModel: SignUpViewModel,
+    userViewModel: UserViewModel,
     onBackButtonClicked: () -> Unit,
     onSaveAccountButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -194,8 +196,10 @@ fun SignUpSummaryScreen(
         onBackButtonClicked,
     ) {
         signUpViewModel.onEvent(
-            SignUpEvent.AccountDataScreenNextButtonClicked(
-                coroutineScope, onSaveAccountButtonClicked
+            SignUpEvent.CreateAccountButtonClicked(
+                coroutineScope,
+                userViewModel,
+                onSaveAccountButtonClicked,
             )
         )
     }
@@ -261,6 +265,7 @@ fun concatenateStrings(@StringRes stringId: Int, value: String): String {
 fun SignUpSummaryScreenPreview() {
     SignUpSummaryScreen(
         signUpViewModel = viewModel(factory = AppViewModelProvider.Factory),
+        userViewModel = viewModel(factory = AppViewModelProvider.Factory),
         onBackButtonClicked = { },
         onSaveAccountButtonClicked = { })
 }

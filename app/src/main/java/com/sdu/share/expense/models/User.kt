@@ -13,4 +13,16 @@ data class User(
     val username: String,
     val password: String,
     val shouldSendNotification: Boolean
-)
+) {
+    companion object Factory {
+        fun getDefault(): User = User(
+            id = 0,
+            firstName = "",
+            lastName = "",
+            email = "",
+            username = "",
+            password = "",
+            shouldSendNotification = false
+        )
+    }
+}
