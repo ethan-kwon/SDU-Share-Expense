@@ -12,7 +12,8 @@ data class User(
     val email: String,
     val username: String,
     val password: String,
-    val shouldSendNotification: Boolean
+    val shouldSendNotification: Boolean,
+    val groups: List<String>
 ) {
     companion object Factory {
         fun getDefault(): User = User(
@@ -22,7 +23,8 @@ data class User(
             email = "",
             username = "",
             password = "",
-            shouldSendNotification = false
+            shouldSendNotification = false,
+            listOf()
         )
     }
 }

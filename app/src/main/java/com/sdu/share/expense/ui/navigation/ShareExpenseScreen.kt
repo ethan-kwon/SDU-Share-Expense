@@ -10,5 +10,7 @@ enum class ShareExpenseScreen(@StringRes val title: Int) {
     SIGN_UP_ACCOUNT_DETAILS_SCREEN(R.string.sign_up_account_details_screen),
     SIGN_UP_SUMMARY_SCREEN(R.string.sign_up_summary_screen),
     HOME_SCREEN(R.string.home_screen),
-    PROFILE_SCREEN(R.string.profile_screen)
+    PROFILE_SCREEN(R.string.profile_screen),
+    ADD_GROUP_SCREEN(R.string.add_group_screen),
+    GROUP_SCREEN(R.string.group_screen)
 }

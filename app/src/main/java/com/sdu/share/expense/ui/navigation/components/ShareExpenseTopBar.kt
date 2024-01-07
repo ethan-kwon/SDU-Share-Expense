@@ -15,13 +15,13 @@ import com.sdu.share.expense.ui.navigation.ShareExpenseScreen
 
 @Composable
 fun ShareExpenseTopBar(
-    currentScreen: ShareExpenseScreen,
+    title: String,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
+        title = { Text(title) },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),

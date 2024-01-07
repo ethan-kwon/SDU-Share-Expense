@@ -4,9 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.sdu.share.expense.R
+import com.sdu.share.expense.data.group.GroupDao
 import com.sdu.share.expense.data.user.UserDao
 import com.sdu.share.expense.models.User
+import com.sdu.share.expense.models.Group
 import com.sdu.share.expense.security.PasswordEncryptor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,12 +17,14 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [User::class],
-    version = 1,
+    entities = [User::class, Group::class],
+    version = 3,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class ShareExpenseDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun groupDao(): GroupDao
 
     companion object {
         @Volatile
@@ -28,19 +33,20 @@ abstract class ShareExpenseDatabase : RoomDatabase() {
         fun getDatabase(context: Context): ShareExpenseDatabase {
             val database = Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, ShareExpenseDatabase::class.java, "share_expense_db")
+                    .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }
             }
 
-            val initializer = DatabaseInitializer(context, database.userDao())
-            initializer.afterDatabaseCreate()
+            val userInitializer = UserDatabaseInitializer(context, database.userDao())
+            userInitializer.afterDatabaseCreate()
 
             return database
         }
     }
 }
 
-class DatabaseInitializer(
+class UserDatabaseInitializer(
     context: Context,
     private val userDao: UserDao
 ) {
@@ -66,7 +72,8 @@ class DatabaseInitializer(
                 "john.doe@gmail.com",
                 "JohnDoe",
                 passwordEncryptor.encryptPassword("Password11"),
-                false
+                false,
+                mutableListOf()
             ),
             User(
                 0,
@@ -75,7 +82,8 @@ class DatabaseInitializer(
                 "jane.smith@microsoft.com",
                 "JaneX",
                 passwordEncryptor.encryptPassword("Password11"),
-                true
+                true,
+                mutableListOf()
             ),
             User(
                 0,
@@ -84,7 +92,8 @@ class DatabaseInitializer(
                 "darth.vader@email.com",
                 "Vader",
                 passwordEncryptor.encryptPassword("abc"),
-                false
+                false,
+                mutableListOf()
             ),
         )
 

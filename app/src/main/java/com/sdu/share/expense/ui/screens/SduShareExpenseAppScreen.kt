@@ -8,10 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.sdu.share.expense.AppViewModelProvider
+import com.sdu.share.expense.ui.models.group.GroupViewModel
 import com.sdu.share.expense.ui.models.signin.SignInViewModel
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.models.user.UserViewModel
@@ -33,12 +37,13 @@ fun ShareExpenseApp(
     val signUpViewModel: SignUpViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val signInViewModel: SignInViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val userViewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val groupViewModel: GroupViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     Scaffold(
         topBar = {
             if (shouldTopBarBeDisplayed(currentScreen)) {
                 ShareExpenseTopBar(
-                    currentScreen = currentScreen,
+                    title = currentScreen.name,
                     canNavigateBack = navController.previousBackStackEntry != null,
                     navigateUp = { navController.navigateUp() }
                 )
@@ -65,7 +70,9 @@ fun ShareExpenseApp(
                 userViewModel = userViewModel
             )
             mainAppGraph(
-                userViewModel = userViewModel
+                userViewModel = userViewModel,
+                navController = navController,
+                groupViewModel = groupViewModel
             )
         }
     }
@@ -86,7 +93,7 @@ private fun bottomBarSwitchScreen(
 ) {
     if (currentScreen == ShareExpenseScreen.HOME_SCREEN) {
         bottomBarNavigate(navController, ShareExpenseScreen.PROFILE_SCREEN.name)
-    } else {
+    } else if (currentScreen == ShareExpenseScreen.PROFILE_SCREEN) {
         bottomBarNavigate(navController, ShareExpenseScreen.HOME_SCREEN.name)
     }
 }

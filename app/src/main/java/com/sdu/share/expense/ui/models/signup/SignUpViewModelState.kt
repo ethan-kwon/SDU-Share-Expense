@@ -32,5 +32,6 @@ fun SignUpViewModelState.toUser(): User = User(
     email = email,
     username = username,
     password = password,
-    shouldSendNotification = shouldSendNotification
+    shouldSendNotification = shouldSendNotification,
+    groups = mutableListOf()
 )
