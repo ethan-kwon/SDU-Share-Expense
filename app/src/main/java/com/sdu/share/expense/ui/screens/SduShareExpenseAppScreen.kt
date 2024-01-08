@@ -18,6 +18,7 @@ import com.sdu.share.expense.AppViewModelProvider
 import com.sdu.share.expense.ui.models.addgroup.AddGroupViewModel
 import com.sdu.share.expense.ui.models.group.GroupViewModel
 import com.sdu.share.expense.ui.models.group.RGroupViewModel
+import com.sdu.share.expense.ui.models.profile.ProfileViewModel
 import com.sdu.share.expense.ui.models.signin.SignInViewModel
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.models.user.UserViewModel
@@ -41,6 +42,7 @@ fun ShareExpenseApp(
     val userViewModel: UserViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val groupViewModel: GroupViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val rGroupViewModel: RGroupViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     Scaffold(
         topBar = {
@@ -76,7 +78,8 @@ fun ShareExpenseApp(
                 userViewModel = userViewModel,
                 navController = navController,
                 groupViewModel = groupViewModel,
-                rGroupViewModel = rGroupViewModel
+                rGroupViewModel = rGroupViewModel,
+                profileViewModel = profileViewModel
             )
         }
     }

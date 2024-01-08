@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import com.sdu.share.expense.ui.models.addgroup.AddGroupViewModel
 import com.sdu.share.expense.ui.models.group.GroupViewModel
 import com.sdu.share.expense.ui.models.group.RGroupViewModel
+import com.sdu.share.expense.ui.models.profile.ProfileViewModel
 import com.sdu.share.expense.ui.models.user.UserViewModel
 import com.sdu.share.expense.ui.screens.AddExpenseScreen
 import com.sdu.share.expense.ui.screens.AddGroupScreen
@@ -20,7 +21,8 @@ fun NavGraphBuilder.mainAppGraph(
     navController: NavHostController,
     userViewModel: UserViewModel,
     groupViewModel: GroupViewModel,
-    rGroupViewModel: RGroupViewModel
+    rGroupViewModel: RGroupViewModel,
+    profileViewModel: ProfileViewModel
 ) {
     composable(route = ShareExpenseScreen.HOME_SCREEN.name) {
         HomeScreen(userViewModel,
@@ -34,7 +36,7 @@ fun NavGraphBuilder.mainAppGraph(
         )
     }
     composable(route = ShareExpenseScreen.PROFILE_SCREEN.name) {
-        ProfileScreen()
+        ProfileScreen(userViewModel, profileViewModel = profileViewModel)
     }
     composable(route = ShareExpenseScreen.ADD_GROUP_SCREEN.name) {
         AddGroupScreen(navController, userViewModel = userViewModel)

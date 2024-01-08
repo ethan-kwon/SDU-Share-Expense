@@ -1,8 +1,11 @@
 package com.sdu.share.expense.ui.models.addexpense
 
+import android.app.Application
+import android.content.Intent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.sdu.share.expense.data.expense.ExpenseRepository
@@ -21,8 +24,8 @@ import kotlinx.coroutines.launch
 class AddExpenseViewModel (
     private val expenseRepository: ExpenseRepository,
     private val groupRepository: GroupRepository,
-    private val userRepository: UserRepository
-): ViewModel() {
+    private val userRepository: UserRepository, application: Application
+): AndroidViewModel(application) {
     var formState by mutableStateOf(AddExpenseViewModelState())
         private set
 
@@ -50,6 +53,7 @@ class AddExpenseViewModel (
                         expenseRepository.insertExpense(expense = expense)
                         groupRepository.updateGroup(group)
                     }
+                    val intent = Intent()
                     event.navigateTo()
                 }
             }

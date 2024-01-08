@@ -8,6 +8,7 @@ import com.sdu.share.expense.ui.models.addexpense.AddExpenseViewModel
 import com.sdu.share.expense.ui.models.addgroup.AddGroupViewModel
 import com.sdu.share.expense.ui.models.group.GroupViewModel
 import com.sdu.share.expense.ui.models.group.RGroupViewModel
+import com.sdu.share.expense.ui.models.profile.ProfileViewModel
 import com.sdu.share.expense.ui.models.signin.SignInViewModel
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.models.user.UserViewModel
@@ -42,13 +43,17 @@ object AppViewModelProvider {
             AddExpenseViewModel(
                 shareExpenseApplication().container.expenseRepository,
                 shareExpenseApplication().container.groupRepository,
-                shareExpenseApplication().container.userRepository
+                shareExpenseApplication().container.userRepository,
+                shareExpenseApplication()
             )
         }
         initializer {
             RGroupViewModel(
                 expenseRepository = shareExpenseApplication().container.expenseRepository,
             )
+        }
+        initializer {
+            ProfileViewModel(userRepository = shareExpenseApplication().container.userRepository)
         }
     }
 }

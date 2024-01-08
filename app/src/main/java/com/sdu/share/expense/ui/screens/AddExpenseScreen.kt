@@ -99,7 +99,9 @@ fun AddExpenseScreen(navController: NavHostController,
 fun ExpenseUserListItem(user: User, userViewModel: UserViewModel, groupViewModel: GroupViewModel,
                         addExpenseViewModel: AddExpenseViewModel) {
     var isChecked by remember { mutableStateOf(false) }
-    if (groupViewModel.state.group.members.contains(user.username))
+    if (!groupViewModel.state.group.members.contains(user.username)) {
+        return
+    }
 
     Row(
         modifier = Modifier
