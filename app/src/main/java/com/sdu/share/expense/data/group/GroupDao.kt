@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.sdu.share.expense.models.Group
 import com.sdu.share.expense.models.User
 import java.util.UUID
@@ -24,6 +25,9 @@ interface GroupDao {
 
     @Query("DELETE FROM groups WHERE id = :id")
     fun deleteID(id: UUID)
+
+    @Update
+    fun updateGroup(group: Group)
 
     @Query("DELETE FROM groups")
     fun deleteAll()

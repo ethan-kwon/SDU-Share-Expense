@@ -14,6 +14,10 @@ class GroupRepositoryImpl(private val groupDao: GroupDao) : GroupRepository {
         return groupDao.getGroupByID(id)
     }
 
+    override fun updateGroup(group: Group) {
+        return groupDao.updateGroup(group)
+    }
+
     override fun existsByID(id: UUID): Boolean {
         return groupDao.existsByID(id)
     }

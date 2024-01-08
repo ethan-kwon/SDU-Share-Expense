@@ -12,5 +12,7 @@ enum class ShareExpenseScreen(@StringRes val title: Int) {
     HOME_SCREEN(R.string.home_screen),
     PROFILE_SCREEN(R.string.profile_screen),
     ADD_GROUP_SCREEN(R.string.add_group_screen),
-    GROUP_SCREEN(R.string.group_screen)
+    GROUP_SCREEN(R.string.group_screen),
+    EXPENSE_SCREEN(R.string.expense_screen),
+    ADD_EXPENSE_SCREEN(R.string.add_expense_screen)
 }

@@ -6,8 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.sdu.share.expense.R
+import com.sdu.share.expense.data.expense.ExpenseDao
 import com.sdu.share.expense.data.group.GroupDao
 import com.sdu.share.expense.data.user.UserDao
+import com.sdu.share.expense.models.Expense
 import com.sdu.share.expense.models.User
 import com.sdu.share.expense.models.Group
 import com.sdu.share.expense.security.PasswordEncryptor
@@ -17,14 +19,15 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 @Database(
-    entities = [User::class, Group::class],
-    version = 4,
+    entities = [User::class, Group::class, Expense::class],
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class ShareExpenseDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun groupDao(): GroupDao
+    abstract fun expenseDao(): ExpenseDao
 
     companion object {
         @Volatile
@@ -43,8 +46,9 @@ abstract class ShareExpenseDatabase : RoomDatabase() {
                         .build()
                         .also { Instance = it }
                 }
-                val userInitializer = UserDatabaseInitializer(context, database.userDao())
-                userInitializer.afterDatabaseCreate()
+                val initializer = DatabaseInitializer(context, database.userDao(),
+                    database.groupDao())
+                initializer.afterDatabaseCreate()
             }
 
             return database
@@ -52,9 +56,10 @@ abstract class ShareExpenseDatabase : RoomDatabase() {
     }
 }
 
-class UserDatabaseInitializer(
+class DatabaseInitializer(
     context: Context,
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val groupDao: GroupDao
 ) {
     private val initializationVector = context.resources.getString(R.string.initialization_vector)
     private val secretKey = context.resources.getString(R.string.secret_key)
@@ -65,6 +70,7 @@ class UserDatabaseInitializer(
     fun afterDatabaseCreate() {
         applicationScope.launch(Dispatchers.IO) {
             userDao.deleteAll()
+            groupDao.deleteAll()
             prepopulateDatabase()
         }
     }

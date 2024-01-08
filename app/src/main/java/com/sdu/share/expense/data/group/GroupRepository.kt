@@ -13,5 +13,7 @@ interface GroupRepository {
 
     fun getAllGroups(): LiveData<List<Group>>
 
+    fun updateGroup(group: Group)
+
     fun deleteID(id: UUID)
 }

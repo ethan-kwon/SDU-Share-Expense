@@ -10,24 +10,27 @@ import com.sdu.share.expense.data.group.GroupRepository
 import com.sdu.share.expense.models.Expense
 import com.sdu.share.expense.models.Group
 import com.sdu.share.expense.models.User
+import com.sdu.share.expense.ui.models.rgroup.RGroupViewModelState
 
-class GroupViewModel(
-    private val groupRepository: GroupRepository,
+class RGroupViewModel(
+    private val expenseRepository: ExpenseRepository
 ) : ViewModel() {
-    var state by mutableStateOf(GroupViewModelState())
+    var state by mutableStateOf(RGroupViewModelState())
         private set
 
-    val allGroups: LiveData<List<Group>> = groupRepository.getAllGroups()
+    val allExpenses: LiveData<List<Expense>> = expenseRepository.getAllExpenses()
 
-    fun onEvent(event: GroupViewModelEvent) {
+    fun onEvent(event: RGroupViewModelEvent) {
         when (event) {
-            is GroupViewModelEvent.GroupHasChanged -> {
-                state = state.copy(group = event.group)
+            is RGroupViewModelEvent.ExpenseHasChanged -> {
+                state = state.copy(expense = event.expense)
             }
+
+            else -> {}
         }
     }
 }
 
-sealed class GroupViewModelEvent {
-    data class GroupHasChanged(val group: Group) : GroupViewModelEvent()
+sealed class RGroupViewModelEvent {
+    data class ExpenseHasChanged(val expense: Expense) : RGroupViewModelEvent()
 }

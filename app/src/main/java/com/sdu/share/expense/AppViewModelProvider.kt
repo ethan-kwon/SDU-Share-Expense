@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.sdu.share.expense.ui.models.addexpense.AddExpenseViewModel
 import com.sdu.share.expense.ui.models.addgroup.AddGroupViewModel
 import com.sdu.share.expense.ui.models.group.GroupViewModel
+import com.sdu.share.expense.ui.models.group.RGroupViewModel
 import com.sdu.share.expense.ui.models.signin.SignInViewModel
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
 import com.sdu.share.expense.ui.models.user.UserViewModel
@@ -34,6 +36,18 @@ object AppViewModelProvider {
             AddGroupViewModel(
                 shareExpenseApplication().container.groupRepository,
                 shareExpenseApplication().container.userRepository
+            )
+        }
+        initializer {
+            AddExpenseViewModel(
+                shareExpenseApplication().container.expenseRepository,
+                shareExpenseApplication().container.groupRepository,
+                shareExpenseApplication().container.userRepository
+            )
+        }
+        initializer {
+            RGroupViewModel(
+                expenseRepository = shareExpenseApplication().container.expenseRepository,
             )
         }
     }

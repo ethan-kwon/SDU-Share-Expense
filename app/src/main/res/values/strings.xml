@@ -13,6 +13,7 @@
     <string name="expense_screen">Expense</string>
     <string name="add_group_screen">Add group screen</string>
     <string name="group_screen">Group screen</string>
+    <string name="add_expense_screen">Add expense screen</string>
 
     <!-- Navigation bar item names -->
     <string name="home_navigation_bar_item_text">Home</string>

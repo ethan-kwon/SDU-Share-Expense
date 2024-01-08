@@ -38,7 +38,9 @@ class AddGroupViewModel (
                 showNameError = !regex.toRegex().matches(formState.name)
             }
             is AddGroupState.CreateGroupButtonClicked -> {
+                println(formState.checkedUsers)
                 if (!showNameError && formState.checkedUsers.isNotEmpty()) {
+                    println("should be running")
                     val usernames: MutableList<String> = mutableListOf()
                     formState.checkedUsers.forEach {
                         user -> usernames.add(user.username)
@@ -59,11 +61,12 @@ class AddGroupViewModel (
                 }
             }
             is AddGroupState.UserChecked -> {
-                if (formState.checkedUsers.contains(event.username)) {
-                    formState.checkedUsers.remove(event.username)
+                if (formState.checkedUsers.contains(event.user)) {
+                    formState.checkedUsers.remove(event.user)
                 } else {
-                    formState.checkedUsers.add(event.username)
+                    formState.checkedUsers.add(event.user)
                 }
+                println(formState.checkedUsers)
             }
         }
     }
@@ -78,5 +81,5 @@ sealed class AddGroupState {
         val navigateTo: () -> Unit
     ) : AddGroupState()
 
-    data class UserChecked(val username: User): AddGroupState()
+    data class UserChecked(val user: User): AddGroupState()
 }

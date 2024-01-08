@@ -7,8 +7,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.sdu.share.expense.ui.models.addgroup.AddGroupViewModel
 import com.sdu.share.expense.ui.models.group.GroupViewModel
+import com.sdu.share.expense.ui.models.group.RGroupViewModel
 import com.sdu.share.expense.ui.models.user.UserViewModel
+import com.sdu.share.expense.ui.screens.AddExpenseScreen
 import com.sdu.share.expense.ui.screens.AddGroupScreen
+import com.sdu.share.expense.ui.screens.ExpenseScreen
 import com.sdu.share.expense.ui.screens.GroupScreen
 import com.sdu.share.expense.ui.screens.HomeScreen
 import com.sdu.share.expense.ui.screens.ProfileScreen
@@ -17,6 +20,7 @@ fun NavGraphBuilder.mainAppGraph(
     navController: NavHostController,
     userViewModel: UserViewModel,
     groupViewModel: GroupViewModel,
+    rGroupViewModel: RGroupViewModel
 ) {
     composable(route = ShareExpenseScreen.HOME_SCREEN.name) {
         HomeScreen(userViewModel,
@@ -36,6 +40,19 @@ fun NavGraphBuilder.mainAppGraph(
         AddGroupScreen(navController, userViewModel = userViewModel)
     }
     composable(route = ShareExpenseScreen.GROUP_SCREEN.name) {
-        GroupScreen(navController, groupViewModel, userViewModel)
+        GroupScreen(navController, groupViewModel, onNavigateToAdd = {
+            navController.navigate(ShareExpenseScreen.ADD_EXPENSE_SCREEN.name)
+        },
+            rgroupViewModel = rGroupViewModel,
+            onNavigateToExpense = {
+                navController.navigate(ShareExpenseScreen.EXPENSE_SCREEN.name)
+            })
+    }
+    composable(route = ShareExpenseScreen.EXPENSE_SCREEN.name) {
+        ExpenseScreen(rGroupViewModel = rGroupViewModel)
+    }
+    composable(route = ShareExpenseScreen.ADD_EXPENSE_SCREEN.name) {
+        AddExpenseScreen(navController = navController, groupViewModel = groupViewModel,
+            userViewModel = userViewModel)
     }
 }
