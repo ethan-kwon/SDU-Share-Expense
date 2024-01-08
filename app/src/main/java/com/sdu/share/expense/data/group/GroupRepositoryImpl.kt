@@ -1,5 +1,6 @@
 package com.sdu.share.expense.data.group
 
+import androidx.lifecycle.LiveData
 import com.sdu.share.expense.models.Group
 import java.util.UUID
 
@@ -15,6 +16,10 @@ class GroupRepositoryImpl(private val groupDao: GroupDao) : GroupRepository {
 
     override fun existsByID(id: UUID): Boolean {
         return groupDao.existsByID(id)
+    }
+
+    override fun getAllGroups(): LiveData<List<Group>> {
+        return groupDao.getAllGroups()
     }
 
     override fun deleteID(id: UUID) {

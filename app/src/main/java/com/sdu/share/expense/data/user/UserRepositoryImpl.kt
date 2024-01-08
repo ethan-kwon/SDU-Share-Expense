@@ -1,5 +1,6 @@
 package com.sdu.share.expense.data.user
 
+import androidx.lifecycle.LiveData
 import com.sdu.share.expense.models.User
 
 class UserRepositoryImpl(private val userDao: UserDao) : UserRepository {
@@ -14,5 +15,13 @@ class UserRepositoryImpl(private val userDao: UserDao) : UserRepository {
 
     override fun existsByUsername(username: String): Boolean {
         return userDao.existsByUsername(username)
+    }
+
+    override fun getAllUsers(): LiveData<List<User>> {
+        return userDao.getAllUsers()
+    }
+
+    override fun updateUser(user: User) {
+        return userDao.updateUser(user = user)
     }
 }

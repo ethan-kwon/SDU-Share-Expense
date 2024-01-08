@@ -1,5 +1,6 @@
 package com.sdu.share.expense.data.group
 
+import androidx.lifecycle.LiveData
 import com.sdu.share.expense.models.Group
 import java.util.UUID
 
@@ -9,6 +10,8 @@ interface GroupRepository {
     fun getGroupByID(id: UUID): Group?
 
     fun existsByID(id: UUID): Boolean
+
+    fun getAllGroups(): LiveData<List<Group>>
 
     fun deleteID(id: UUID)
 }

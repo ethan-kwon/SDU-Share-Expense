@@ -13,7 +13,7 @@ data class User(
     val username: String,
     val password: String,
     val shouldSendNotification: Boolean,
-    val groups: List<String>
+    val groups: MutableList<String>
 ) {
     companion object Factory {
         fun getDefault(): User = User(
@@ -24,7 +24,7 @@ data class User(
             username = "",
             password = "",
             shouldSendNotification = false,
-            listOf()
+            mutableListOf()
         )
     }
 }

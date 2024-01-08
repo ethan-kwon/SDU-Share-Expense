@@ -15,11 +15,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sdu.share.expense.models.Group
+import com.sdu.share.expense.models.User
 import com.sdu.share.expense.ui.models.group.GroupViewModel
 import com.sdu.share.expense.ui.models.group.GroupViewModelEvent
 import com.sdu.share.expense.ui.models.user.UserViewModel
@@ -34,9 +38,7 @@ fun HomeScreen(
     onNavigateToGroup: () -> Unit
 ) {
     val user = userViewModel.state.user
-    val temp = listOf(Group(UUID.randomUUID(), "Home Expenses", listOf(), members = listOf(user.username)),
-        Group(UUID.randomUUID(), "London Trip Expenses", listOf(), members = listOf(user.username)),
-        Group(UUID.randomUUID(), "Aarhus Trip Expenses", listOf(), members = listOf(user.username)))
+    val groups by groupViewModel.allGroups.observeAsState(emptyList())
 
     Scaffold(
         topBar = {
@@ -53,8 +55,9 @@ fun HomeScreen(
         }
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(temp) { group ->
+            items(groups) { group ->
                 GroupListItem(
+                    curUser = user,
                     group = group, groupViewModel,
                     onItemClick = onNavigateToGroup
                 )
@@ -64,14 +67,17 @@ fun HomeScreen(
 }
 
 @Composable
-fun GroupListItem(group: Group, groupViewModel: GroupViewModel, onItemClick: () -> Unit) {
+fun GroupListItem(curUser: User, group: Group, groupViewModel: GroupViewModel, onItemClick: () -> Unit) {
+    if (!group.members.contains(curUser.username)) {
+        return
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
                 groupViewModel.onEvent(GroupViewModelEvent.GroupHasChanged(group))
-                println(group.name)
                 onItemClick()
             }
     ) {

@@ -9,8 +9,8 @@ data class Group(
     @PrimaryKey
     val id: UUID,
     val name: String,
-    val expenses: List<String>,
-    val members: List<String>,
+    val expenses: MutableList<String>,
+    val members: MutableList<String>,
 ) {
 
     companion object Factory {

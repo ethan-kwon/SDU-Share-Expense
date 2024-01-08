@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [User::class, Group::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -31,15 +31,21 @@ abstract class ShareExpenseDatabase : RoomDatabase() {
         private var Instance: ShareExpenseDatabase? = null
 
         fun getDatabase(context: Context): ShareExpenseDatabase {
-            val database = Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, ShareExpenseDatabase::class.java, "share_expense_db")
-                    .fallbackToDestructiveMigration()
-                    .build()
-                    .also { Instance = it }
+            var database = Instance
+            if (database == null) {
+                database = Instance ?: synchronized(this) {
+                    Room.databaseBuilder(
+                        context,
+                        ShareExpenseDatabase::class.java,
+                        "share_expense_db"
+                    )
+                        .fallbackToDestructiveMigration()
+                        .build()
+                        .also { Instance = it }
+                }
+                val userInitializer = UserDatabaseInitializer(context, database.userDao())
+                userInitializer.afterDatabaseCreate()
             }
-
-            val userInitializer = UserDatabaseInitializer(context, database.userDao())
-            userInitializer.afterDatabaseCreate()
 
             return database
         }

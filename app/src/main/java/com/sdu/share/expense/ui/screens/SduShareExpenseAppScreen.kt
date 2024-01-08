@@ -15,6 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.sdu.share.expense.AppViewModelProvider
+import com.sdu.share.expense.ui.models.addgroup.AddGroupViewModel
 import com.sdu.share.expense.ui.models.group.GroupViewModel
 import com.sdu.share.expense.ui.models.signin.SignInViewModel
 import com.sdu.share.expense.ui.models.signup.SignUpViewModel
@@ -72,7 +73,7 @@ fun ShareExpenseApp(
             mainAppGraph(
                 userViewModel = userViewModel,
                 navController = navController,
-                groupViewModel = groupViewModel
+                groupViewModel = groupViewModel,
             )
         }
     }
